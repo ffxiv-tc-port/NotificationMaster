@@ -34,7 +34,7 @@ internal unsafe class PartyFinder : IDisposable
 
     private void Tick(object _)
     {
-        var addon = (AddonPartyList*)Svc.GameGui.GetAddonByName("_PartyList", 1).Address;
+        var addon = (AddonPartyList*)Svc.GameGui.GetAddonByName("_PartyList", 1);
         if(addon == null)
         {
             return;
