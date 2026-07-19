@@ -9,27 +9,27 @@ internal partial class ConfigGui
     {
         var id = 0;
         var toDelete = -1;
-        if(ImGui.Checkbox("Enable", ref p.cfg.chatMessage_Enable))
+        if(ImGui.Checkbox("啟用", ref p.cfg.chatMessage_Enable))
         {
             ChatMessage.Setup(p.cfg.chatMessage_Enable, p);
         }
         if(p.cfg.chatMessage_Enable)
         {
             //ImGui.TextColored(ImGui.ColorConvertU32ToFloat4(0xff0000ff), "Triggers are paused while configuration is open.");
-            ImGui.TextWrapped("When chat message matching any rule received, if FFXIV is running in background:");
-            ImGui.Checkbox("Show tray notification", ref p.cfg.chatMessage_ShowToastNotification);
-            ImGui.Checkbox("Flash taskbar icon", ref p.cfg.chatMessage_FlashTrayIcon);
-            ImGui.Checkbox("Bring FFXIV to foreground", ref p.cfg.chatMessage_AutoActivateWindow);
-            ImGui.Checkbox("Execute actions even if game is active", ref p.cfg.chatMessage_AlwaysExecute);
+            ImGui.TextWrapped("當收到符合任一規則的聊天訊息時，若 FFXIV 在背景執行：");
+            ImGui.Checkbox("顯示系統匣通知", ref p.cfg.chatMessage_ShowToastNotification);
+            ImGui.Checkbox("閃爍工作列圖示", ref p.cfg.chatMessage_FlashTrayIcon);
+            ImGui.Checkbox("將 FFXIV 帶到前景", ref p.cfg.chatMessage_AutoActivateWindow);
+            ImGui.Checkbox("即使遊戲在前景也執行動作", ref p.cfg.chatMessage_AlwaysExecute);
             ForegroundWarning(p.cfg.chatMessage_AutoActivateWindow);
             DrawSoundSettings(ref p.cfg.chatMessage_SoundSettings);
             DrawHttpMaster(p.cfg.chatMessage_HttpRequests, ref p.cfg.chatMessage_HttpRequestsEnable,
-                "$S - sender\n$M - message\n$T - chat type");
+                "$S - 發送者\n$M - 訊息內容\n$T - 聊天類型");
             ImGui.Separator();
-            if(ImGui.CollapsingHeader("Triggers"))
+            if(ImGui.CollapsingHeader("觸發規則"))
             {
                 //ImGui.BeginChild("##trigs");
-                if(ImGui.Button("Add"))
+                if(ImGui.Button("新增"))
                 {
                     p.cfg.chatMessage_Elements.Add(new ChatMessageElement());
                 }
@@ -39,15 +39,15 @@ internal partial class ConfigGui
                 ImGui.SetColumnWidth(2, ImGuiEx.GetWindowContentRegionWidth() - 150 - 150 - 100 - 40);
                 ImGui.SetColumnWidth(3, 100f);
                 ImGui.SetColumnWidth(4, 40f);
-                ImGui.Text("Type");
+                ImGui.Text("類型");
                 ImGui.NextColumn();
-                ImGui.Text("Sender");
+                ImGui.Text("發送者");
                 ImGui.NextColumn();
-                ImGui.Text("Message");
+                ImGui.Text("訊息內容");
                 ImGui.NextColumn();
-                ImGui.Text("Search mode");
+                ImGui.Text("比對模式");
                 ImGui.NextColumn();
-                ImGui.Text("Del");
+                ImGui.Text("刪除");
                 ImGui.NextColumn();
                 ImGui.Columns(1);
                 for(var i = 0; i < p.cfg.chatMessage_Elements.Count; i++)
@@ -55,7 +55,7 @@ internal partial class ConfigGui
                     var elem = p.cfg.chatMessage_Elements[i];
                     ImGui.Columns(5);
                     ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-                    if(ImGui.BeginCombo("##fselect" + i, elem.ChatTypes.Count == 0 ? "Any" : elem.ChatTypes.Count == 1 ? ((XivChatType)elem.ChatTypes.First()).ToString() : $"{elem.ChatTypes.Count} types"))
+                    if(ImGui.BeginCombo("##fselect" + i, elem.ChatTypes.Count == 0 ? "任何" : elem.ChatTypes.Count == 1 ? ((XivChatType)elem.ChatTypes.First()).ToString() : $"{elem.ChatTypes.Count} 種類型"))
                     {
                         var customElements = new HashSet<ushort>(elem.ChatTypes);
                         customElements.RemoveWhere(p => Enum.GetValues<XivChatType>().ToHashSet().Contains((XivChatType)p));
@@ -76,7 +76,7 @@ internal partial class ConfigGui
                         ImGui.SetNextItemWidth(50f);
                         ImGui.InputInt("##typecustom" + i, ref CustomTypeToAdd, 0, 0);
                         ImGui.SameLine();
-                        if(ImGui.Button("Add custom type"))
+                        if(ImGui.Button("新增自訂類型"))
                         {
                             elem.ChatTypes.Add((ushort)CustomTypeToAdd);
                             CustomTypeToAdd = 0;
@@ -99,15 +99,15 @@ internal partial class ConfigGui
                     }
                     ImGui.NextColumn();
                     ImGui.Columns(1);
-                    ImGui.Text("Exceptions:");
+                    ImGui.Text("例外：");
                     ImGui.SameLine();
-                    ImGui.Checkbox("No flashing##" + i, ref elem.NoFlash);
+                    ImGui.Checkbox("不閃爍##" + i, ref elem.NoFlash);
                     ImGui.SameLine();
-                    ImGui.Checkbox("No bring to foreground##" + i, ref elem.NoForeground);
+                    ImGui.Checkbox("不帶到前景##" + i, ref elem.NoForeground);
                     ImGui.SameLine();
-                    ImGui.Checkbox("No toast##" + i, ref elem.NoToast);
+                    ImGui.Checkbox("不顯示提示##" + i, ref elem.NoToast);
                     ImGui.SameLine();
-                    ImGui.Checkbox("No HTTP##" + i, ref elem.NoHTTP);
+                    ImGui.Checkbox("不發送 HTTP##" + i, ref elem.NoHTTP);
                     ImGui.Separator();
                 }
                 //ImGui.EndChild();
@@ -124,18 +124,18 @@ internal partial class ConfigGui
                 }
                 toDelete = -1;
             }
-            if(ImGui.CollapsingHeader("Message log"))
+            if(ImGui.CollapsingHeader("訊息記錄"))
             {
                 //ImGui.BeginChild("##nm_chatlog");
-                ImGui.Checkbox("Pause log", ref p.chatMessage.pause);
+                ImGui.Checkbox("暫停記錄", ref p.chatMessage.pause);
                 if(p.chatMessage != null)
                 {
                     ImGui.Columns(3);
-                    ImGui.Text("Type");
+                    ImGui.Text("類型");
                     ImGui.NextColumn();
-                    ImGui.Text("Sender");
+                    ImGui.Text("發送者");
                     ImGui.NextColumn();
-                    ImGui.Text("Message");
+                    ImGui.Text("訊息內容");
                     ImGui.NextColumn();
                     ImGui.Columns(1);
                     foreach(var e in p.chatMessage.ChatLog)
@@ -170,7 +170,7 @@ internal partial class ConfigGui
                 }
                 else
                 {
-                    ImGui.Text("Error");
+                    ImGui.Text("錯誤");
                 }
                 //ImGui.EndChild();
             }
