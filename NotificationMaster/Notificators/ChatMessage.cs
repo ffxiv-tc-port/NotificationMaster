@@ -59,7 +59,7 @@ internal class ChatMessage : IDisposable
                         if(p.cfg.chatMessage_AutoActivateWindow && !e.NoForeground) Native.Impl.Activate();
                         if(p.cfg.chatMessage_ShowToastNotification && !e.NoToast)
                         {
-                            TrayIconManager.ShowToast(messageFullStr, "Message" + (senderFullStr == "" ? "" : $" from {senderFullStr}"));
+                            TrayIconManager.ShowToast(messageFullStr, senderFullStr == "" ? "Message".Loc() : "Message from ??".Loc(senderFullStr));
                         }
                         if(p.cfg.chatMessage_HttpRequestsEnable && !e.NoHTTP)
                         {

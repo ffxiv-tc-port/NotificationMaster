@@ -51,7 +51,7 @@ internal class HttpMaster : IDisposable
         catch(Exception e)
         {
             PluginLog.Error($"Error while sending a request: {e.Message}\n{e.StackTrace ?? ""}");
-            Svc.Chat.Print($"[NotificationMaster] Error occurred while sending an HTTP request: {e.Message}");
+            Svc.Chat.Print("[NotificationMaster] Error occurred while sending an HTTP request: ??".Loc(e.Message));
         }
     }
 

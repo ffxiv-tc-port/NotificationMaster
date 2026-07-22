@@ -120,6 +120,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="LanguageChineseTraditional.ini">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <EmbeddedResource Include="Sounds\Info.wav" />
 	  <EmbeddedResource Include="Sounds\Alert.wav" />
 	  <EmbeddedResource Include="Sounds\Alarm.wav" />

@@ -102,7 +102,7 @@ internal class MobPulled : IDisposable
                                 if(p.cfg.mobPulled_AutoActivateWindow && !Utils.IsApplicationActivated) Native.Impl.Activate();
                                 if(p.cfg.mobPulled_ShowToastNotification)
                                 {
-                                    TrayIconManager.ShowToast($"{bnpc.Name} has been pulled!", "");
+                                    TrayIconManager.ShowToast("?? has been pulled!".Loc(bnpc.Name), "");
                                 }
                                 if(p.cfg.mobPulled_HttpRequestsEnable)
                                 {
@@ -122,7 +122,7 @@ internal class MobPulled : IDisposable
                                     Svc.Chat.Print(
                                         new SeStringBuilder()
                                         .AddUiForeground(16)
-                                        .AddText($"{bnpc.Name} has been pulled!")
+                                        .AddText("?? has been pulled!".Loc(bnpc.Name))
                                         .AddUiForegroundOff()
                                         .Build());
                                 }
@@ -131,7 +131,7 @@ internal class MobPulled : IDisposable
                                     Svc.Toasts.ShowQuest(
                                         new SeStringBuilder()
                                         .AddUiForeground(16)
-                                        .AddText($"{bnpc.Name} has been pulled!")
+                                        .AddText("?? has been pulled!".Loc(bnpc.Name))
                                         .AddUiForegroundOff()
                                         .Build()
                                         , new QuestToastOptions()

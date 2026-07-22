@@ -23,7 +23,7 @@ internal unsafe class GpNotify : IDisposable
         Svc.Framework.Update += Tick;
         Svc.Commands.AddHandler("/gp", new CommandInfo(OnCommand)
         {
-            HelpMessage = "open config\n/gp <number> → set trigger GP amount"
+            HelpMessage = "open config\n/gp <number> → set trigger GP amount".Loc()
         });
     }
 
@@ -40,18 +40,18 @@ internal unsafe class GpNotify : IDisposable
                 var newgp = int.Parse(arguments.Trim());
                 if(newgp < 0)
                 {
-                    Notify.Error("GP can't be negative");
+                    Notify.Error("GP can't be negative".Loc());
                 }
                 else
                 {
                     p.cfg.gp_GPTreshold = newgp;
                     p.cfg.Save();
-                    Notify.Success("Trigger GP amount set to " + p.cfg.gp_GPTreshold);
+                    Notify.Success("Trigger GP amount set to ??".Loc(p.cfg.gp_GPTreshold));
                 }
             }
             catch(Exception e)
             {
-                Notify.Error("Error: " + e.Message);
+                Notify.Error("Error: ??".Loc(e.Message));
             }
         }
     }
@@ -88,7 +88,7 @@ internal unsafe class GpNotify : IDisposable
                     if(p.cfg.gp_AutoActivateWindow) Native.Impl.Activate();
                     if(p.cfg.gp_ShowToastNotification)
                     {
-                        TrayIconManager.ShowToast(gp + " GP ready!");
+                        TrayIconManager.ShowToast("?? GP ready!".Loc(gp));
                     }
 
                     if(p.cfg.gp_HttpRequestsEnable)

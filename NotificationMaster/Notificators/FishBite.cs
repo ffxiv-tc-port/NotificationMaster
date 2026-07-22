@@ -128,12 +128,26 @@ internal class FishBite : IDisposable
 
         if (p.cfg.fishBite_ShowToastNotification)
         {
-            TrayIconManager.ShowToast($"{char.ToUpper(biteName[0]) + biteName[1..]} bite!", "Fish hooked");
+            var biteTitle = bite switch
+            {
+                FishBiteType.Light => "Light bite!".Loc(),
+                FishBiteType.Medium => "Medium bite!".Loc(),
+                FishBiteType.Heavy => "Heavy bite!".Loc(),
+                _ => $"{char.ToUpper(biteName[0]) + biteName[1..]} bite!"
+            };
+            TrayIconManager.ShowToast(biteTitle, "Fish hooked".Loc());
         }
 
         if (p.cfg.fishBite_ChatMessage)
         {
-            Svc.Chat.Print($"[FishNotify] You hook a fish with a {biteName} bite.");
+            var biteWord = bite switch
+            {
+                FishBiteType.Light => "light".Loc(),
+                FishBiteType.Medium => "medium".Loc(),
+                FishBiteType.Heavy => "heavy".Loc(),
+                _ => biteName
+            };
+            Svc.Chat.Print("[FishNotify] You hook a fish with a ?? bite.".Loc(biteWord));
         }
 
         var soundSettings = bite switch
@@ -227,12 +241,12 @@ internal class FishBite : IDisposable
             p.cfg.fishBite_AutoActivateWindow = false;
 
             p.cfg.Save();
-            Notify.Success("Fish Notify settings reset to defaults");
+            Notify.Success("Fish Notify settings reset to defaults".Loc());
         }
         catch (Exception e)
         {
             PluginLog.Error($"FishBite: Failed to reset to defaults: {e.Message}\n{e.StackTrace ?? ""}");
-            Notify.Error("Failed to reset settings");
+            Notify.Error("Failed to reset settings".Loc());
         }
     }
 
