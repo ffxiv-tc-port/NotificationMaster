@@ -1,5 +1,4 @@
-﻿using Dalamud.Game.Chat;
-using Dalamud.Game.Text;
+﻿using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using System.Text.RegularExpressions;
 
@@ -22,11 +21,8 @@ internal class ChatMessage : IDisposable
         Svc.Chat.ChatMessage += Chat_ChatMessage;
     }
 
-    private void Chat_ChatMessage(IHandleableChatMessage cm)
+    private void Chat_ChatMessage(XivChatType type, int timestamp, ref SeString sender, ref SeString message, ref bool isHandled)
     {
-        var type = cm.LogKind;
-        var sender = cm.Sender;
-        var message = cm.Message;
         if(p.configGui.open)
         {
             if(!pause) ChatLog.AddShifting(((ushort)type, sender.ToString(), message.ToString()));
