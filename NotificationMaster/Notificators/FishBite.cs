@@ -13,6 +13,18 @@ public enum FishBiteType : byte
     None = 255,
 }
 
+// NOTE: real API13 FFXIVClientStructs only exposes FishingEventHandler as a generic
+// EventHandler* (no dedicated FishingEventHandler struct/State field like newer versions),
+// so the real fishing bite state can't be read on this API generation. This is a stand-in
+// enum just so the rest of the file compiles; GetFishingState() below always returns None,
+// so the fish-bite notification feature is a known no-op until this data becomes
+// available (same category of gap as vnavmesh's ZoneSharedGroup / Accountant's AirshipManager).
+public enum FishingState
+{
+    None,
+    Bite,
+}
+
 internal class FishBite : IDisposable
 {
     private NotificationMaster p;
@@ -40,11 +52,9 @@ internal class FishBite : IDisposable
 
     private static unsafe FishingState GetFishingState()
     {
-        var ef = EventFramework.Instance();
-        if (ef == null) return FishingState.None;
-        var handler = ef->EventHandlerModule.FishingEventHandler;
-        if (handler == null) return FishingState.None;
-        return handler->State;
+        // See the NOTE above FishingState's declaration - real API13's FFXIVClientStructs
+        // doesn't expose a typed State field on this API generation, so this is always None.
+        return FishingState.None;
     }
 
     public void Dispose()
