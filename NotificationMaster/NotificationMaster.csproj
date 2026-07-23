@@ -19,7 +19,7 @@
 	</Target>
 
 	<PropertyGroup>
-		<TargetFramework>net9.0-windows7.0</TargetFramework>
+		<TargetFramework>net10.0-windows7.0</TargetFramework>
 		<Platforms>x64</Platforms>
 		<AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
 		<LangVersion>latest</LangVersion>
@@ -77,7 +77,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="DalamudPackager" Version="15.0.0" />
-		<PackageReference Include="ECommons" Version="3.0.0.8" />
+		<PackageReference Include="ECommons" Version="3.2.0.18" />
 		<ProjectReference Include="..\NotificationMasterAPI\NotificationMasterAPI\NotificationMasterAPI.csproj" />
 		<Reference Include="Newtonsoft.Json">
 			<HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
@@ -87,12 +87,20 @@
 			<HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
-      <Reference Include="ImGui.NET">
-          <HintPath>$(DalamudLibPath)ImGui.NET.dll</HintPath>
+      <Reference Include="Dalamud.Bindings.ImGui">
+          <HintPath>$(DalamudLibPath)Dalamud.Bindings.ImGui.dll</HintPath>
           <Private>False</Private>
       </Reference>
-      <Reference Include="ImGuiScene">
-          <HintPath>$(DalamudLibPath)ImGuiScene.dll</HintPath>
+      <Reference Include="Dalamud.Bindings.ImPlot">
+          <HintPath>$(DalamudLibPath)Dalamud.Bindings.ImPlot.dll</HintPath>
+          <Private>False</Private>
+      </Reference>
+      <Reference Include="Dalamud.Bindings.ImGuizmo">
+          <HintPath>$(DalamudLibPath)Dalamud.Bindings.ImGuizmo.dll</HintPath>
+          <Private>False</Private>
+      </Reference>
+      <Reference Include="TerraFX.Interop.Windows">
+          <HintPath>$(DalamudLibPath)TerraFX.Interop.Windows.dll</HintPath>
           <Private>False</Private>
       </Reference>
 		<Reference Include="Lumina">
