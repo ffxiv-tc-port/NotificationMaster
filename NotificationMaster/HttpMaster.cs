@@ -57,9 +57,15 @@ internal class HttpMaster : IDisposable
 
     internal void DoRequests(List<HttpRequestElement> elements, string[][] replacements)
     {
-        foreach(var e in elements)
+        // Called directly from Dalamud event handlers (CfPop, chat, cutscene, fish bite, GP,
+        // login error, map flag, mob pulled) on the framework thread. Request() blocks on
+        // network I/O (up to the 10s client timeout), so it must never run inline here.
+        Task.Run(() =>
         {
-            Request(e.URI.ReplaceAll(replacements, ReplaceType.URLEncode), e.Content.ReplaceAll(replacements, e.Type == 2 ? ReplaceType.JSON : ReplaceType.Normal), e.Type);
-        }
+            foreach (var e in elements)
+            {
+                Request(e.URI.ReplaceAll(replacements, ReplaceType.URLEncode), e.Content.ReplaceAll(replacements, e.Type == 2 ? ReplaceType.JSON : ReplaceType.Normal), e.Type);
+            }
+        });
     }
 }
