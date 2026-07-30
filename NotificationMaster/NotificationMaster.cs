@@ -21,6 +21,7 @@ public class NotificationMaster : IDalamudPlugin
     internal MobPulled mobPulled = null;
     internal PartyFinder partyFinder = null;
     internal FishBite fishBite = null;
+    internal DutyStarted dutyStarted = null;
 
     internal HttpMaster httpMaster;
     public ThreadUpdateActivatedState ThreadUpdActivated;
@@ -64,6 +65,7 @@ public class NotificationMaster : IDalamudPlugin
             if(cfg.mobPulled_Enable) MobPulled.Setup(true, this);
             if(cfg.partyFinder_Enable) PartyFinder.Setup(true, this);
             if(cfg.fishBite_Enable) FishBite.Setup(true, this);
+            if(cfg.dutyStart_Enable) DutyStarted.Setup(true, this);
 
             if(Svc.PluginInterface.Reason == PluginLoadReason.Installer)
             {
@@ -136,6 +138,7 @@ public class NotificationMaster : IDalamudPlugin
         ApproachingMapFlag.Setup(false, this);
         MobPulled.Setup(false, this);
         FishBite.Setup(false, this);
+        DutyStarted.Setup(false, this);
         ThreadUpdActivated.Dispose();
         audioPlayer.Dispose();
         cfg.Save();

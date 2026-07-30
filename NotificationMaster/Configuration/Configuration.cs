@@ -96,6 +96,16 @@ internal class Configuration : IEzConfig
     public SoundSettings partyFinder_SoundSettings = new();
     public bool partyFinder_AlwaysExecute = true;
 
+    public bool dutyStart_Enable = false;
+    public bool dutyStart_ShowToastNotification = true;
+    public bool dutyStart_FlashTrayIcon = true;
+    public bool dutyStart_AutoActivateWindow = false;
+    public bool dutyStart_NotifyRecommence = false;
+    public bool dutyStart_HttpRequestsEnable = false;
+    public List<HttpRequestElement> dutyStart_HttpRequests = [];
+    public SoundSettings dutyStart_SoundSettings = new();
+    public bool dutyStart_AlwaysExecute = false;
+
     public bool fishBite_Enable = false;
     public bool fishBite_ShowToastNotification = false;
     public bool fishBite_FlashTrayIcon = true;
