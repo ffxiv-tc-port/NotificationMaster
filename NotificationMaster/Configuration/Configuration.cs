@@ -115,6 +115,17 @@ internal class Configuration : IEzConfig
     public SoundSettings readyCheck_SoundSettings = new();
     public bool readyCheck_AlwaysExecute = false;
 
+    public bool partyCutscene_Enable = false;
+    public bool partyCutscene_ShowToastNotification = true;
+    public bool partyCutscene_FlashTrayIcon = true;
+    public bool partyCutscene_AutoActivateWindow = false;
+    public bool partyCutscene_ChatMessage = true;
+    public int partyCutscene_MinSeconds = 4;
+    public bool partyCutscene_HttpRequestsEnable = false;
+    public List<HttpRequestElement> partyCutscene_HttpRequests = [];
+    public SoundSettings partyCutscene_SoundSettings = new();
+    public bool partyCutscene_AlwaysExecute = true;
+
     public bool fishBite_Enable = false;
     public bool fishBite_ShowToastNotification = false;
     public bool fishBite_FlashTrayIcon = true;

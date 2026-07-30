@@ -67,6 +67,7 @@ internal partial class ConfigGui : IDisposable
                     DrawTab("Fish Notify".Loc(), DrawFishBiteConfig, p.cfg.fishBite_Enable);
                     DrawTab("Duty start".Loc(), DrawDutyStartedConfig, p.cfg.dutyStart_Enable);
                     DrawTab("Ready check".Loc(), DrawReadyCheckConfig, p.cfg.readyCheck_Enable);
+                    DrawTab("Party cutscene".Loc(), DrawPartyCutsceneConfig, p.cfg.partyCutscene_Enable);
                     PatreonBanner.RightTransparentTab();
                     ImGui.EndTabBar();
                 }
