@@ -106,6 +106,15 @@ internal class Configuration : IEzConfig
     public SoundSettings dutyStart_SoundSettings = new();
     public bool dutyStart_AlwaysExecute = false;
 
+    public bool readyCheck_Enable = false;
+    public bool readyCheck_ShowToastNotification = true;
+    public bool readyCheck_FlashTrayIcon = true;
+    public bool readyCheck_AutoActivateWindow = false;
+    public bool readyCheck_HttpRequestsEnable = false;
+    public List<HttpRequestElement> readyCheck_HttpRequests = [];
+    public SoundSettings readyCheck_SoundSettings = new();
+    public bool readyCheck_AlwaysExecute = false;
+
     public bool fishBite_Enable = false;
     public bool fishBite_ShowToastNotification = false;
     public bool fishBite_FlashTrayIcon = true;
