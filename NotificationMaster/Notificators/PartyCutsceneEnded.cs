@@ -50,7 +50,7 @@ internal class PartyCutsceneEnded : IDisposable
             stopwatch.Reset();
             return;
         }
-        var localPlayer = Svc.ClientState.LocalPlayer;
+        var localPlayer = Svc.Objects.LocalPlayer;
         if(localPlayer == null
             || dutyCompleted
             || Svc.Condition[ConditionFlag.BetweenAreas]
