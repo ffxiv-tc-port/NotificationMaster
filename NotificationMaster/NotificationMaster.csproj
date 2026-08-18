@@ -77,7 +77,15 @@
 
 	<ItemGroup>
 		<PackageReference Include="DalamudPackager" Version="15.0.0" />
-		<PackageReference Include="ECommons" Version="3.0.1.15" />
+		<!-- ECommons 走本 org 的 fork 子模組(BaseVersion 是 3.0.1.15,只換來源不換版本號)。
+		     公開 NuGet 的 ECommons 沒有我們補的判空/加固,其中 AddonMaster / ClickHelper 對
+		     AtkComponentBase.OwnerNode 零判空是 AVE 入口 —— AVE 在 .NET Core 是 corrupted-state
+		     exception,try/catch 與 HookSafety.ExecuteSafe 都攔不到,所以來源必須是 fork。
+		     🔴 版本號分不出來源:公開 NuGet 也有 3.0.1.15,判定只能看內容(加固版才有的
+		     GenericHelpers.IsComponentEnabled 等成員,公開那顆是 0)。
+		     驗法 tools/fleet/ecommons_hardening_check.py —— 兩軸:obj/project.assets.json 的
+		     ECommons 條目是 type=project ＋ 出貨目錄那顆 ECommons.dll 的標記位元組。 -->
+		<ProjectReference Include="..\ECommons\ECommons\ECommons.csproj" />
 		<ProjectReference Include="..\NotificationMasterAPI\NotificationMasterAPI\NotificationMasterAPI.csproj" />
 		<Reference Include="Newtonsoft.Json">
 			<HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
