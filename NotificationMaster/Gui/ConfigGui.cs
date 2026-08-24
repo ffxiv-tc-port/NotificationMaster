@@ -68,6 +68,7 @@ internal partial class ConfigGui : IDisposable
                     DrawTab("Duty start".Loc(), DrawDutyStartedConfig, p.cfg.dutyStart_Enable);
                     DrawTab("Ready check".Loc(), DrawReadyCheckConfig, p.cfg.readyCheck_Enable);
                     DrawTab("Party cutscene".Loc(), DrawPartyCutsceneConfig, p.cfg.partyCutscene_Enable);
+                    DrawTab("Battle countdown".Loc(), DrawBattleCountdownConfig, p.cfg.countdown_Enable);
                     PatreonBanner.RightTransparentTab();
                     ImGui.EndTabBar();
                 }

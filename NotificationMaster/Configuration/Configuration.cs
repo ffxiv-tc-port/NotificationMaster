@@ -126,6 +126,15 @@ internal class Configuration : IEzConfig
     public SoundSettings partyCutscene_SoundSettings = new();
     public bool partyCutscene_AlwaysExecute = true;
 
+    public bool countdown_Enable = false;
+    public bool countdown_ShowToastNotification = true;
+    public bool countdown_FlashTrayIcon = true;
+    public bool countdown_AutoActivateWindow = false;
+    public bool countdown_HttpRequestsEnable = false;
+    public List<HttpRequestElement> countdown_HttpRequests = [];
+    public SoundSettings countdown_SoundSettings = new();
+    public bool countdown_AlwaysExecute = false;
+
     public bool fishBite_Enable = false;
     public bool fishBite_ShowToastNotification = false;
     public bool fishBite_FlashTrayIcon = true;

@@ -24,6 +24,7 @@ public class NotificationMaster : IDalamudPlugin
     internal DutyStarted dutyStarted = null;
     internal ReadyCheck readyCheck = null;
     internal PartyCutsceneEnded partyCutsceneEnded = null;
+    internal BattleCountdown battleCountdown = null;
 
     internal HttpMaster httpMaster;
     public ThreadUpdateActivatedState ThreadUpdActivated;
@@ -70,6 +71,7 @@ public class NotificationMaster : IDalamudPlugin
             if(cfg.dutyStart_Enable) DutyStarted.Setup(true, this);
             if(cfg.readyCheck_Enable) ReadyCheck.Setup(true, this);
             if(cfg.partyCutscene_Enable) PartyCutsceneEnded.Setup(true, this);
+            if(cfg.countdown_Enable) BattleCountdown.Setup(true, this);
 
             if(Svc.PluginInterface.Reason == PluginLoadReason.Installer)
             {
@@ -145,6 +147,7 @@ public class NotificationMaster : IDalamudPlugin
         DutyStarted.Setup(false, this);
         ReadyCheck.Setup(false, this);
         PartyCutsceneEnded.Setup(false, this);
+        BattleCountdown.Setup(false, this);
         ThreadUpdActivated.Dispose();
         audioPlayer.Dispose();
         cfg.Save();
