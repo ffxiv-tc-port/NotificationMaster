@@ -143,6 +143,7 @@ public class NotificationMaster : IDalamudPlugin
         LoginError.Setup(false, this);
         ApproachingMapFlag.Setup(false, this);
         MobPulled.Setup(false, this);
+        PartyFinder.Setup(false, this);
         FishBite.Setup(false, this);
         DutyStarted.Setup(false, this);
         ReadyCheck.Setup(false, this);
