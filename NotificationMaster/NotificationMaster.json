@@ -1,10 +1,10 @@
 ﻿{
   "Name": "NotificationMaster",
-  "Author": "NightmareXIV, Lother",
+  "Author": "NightmareXIV",
   "Description": "在遊戲視窗縮到最小時，通知你各種遊戲內事件。",
   "Punchline": "目前支援的通知：聊天訊息、接近地圖標記、已找到任務、過場動畫結束、GP 恢復、登入時發生錯誤、怪物已被拉起。",
-  "RepoUrl": "https://github.com/Lother/NotificationMaster",
-  "IconUrl": "https://raw.githubusercontent.com/Lother/DalamudPluginsTC/main/icons/NotificationMaster.png",
+  "RepoUrl": "https://github.com/ffxiv-tc-port/NotificationMaster",
+  "IconUrl": "https://raw.githubusercontent.com/ffxiv-tc-port/DalamudPluginsTC/main/icons/NotificationMaster.png",
     "Tags": [
         "notification"
     ],
