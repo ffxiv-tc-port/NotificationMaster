@@ -41,6 +41,7 @@ public class NotificationMaster : IDalamudPlugin
     {
         P = this;
         ECommonsMain.Init(pluginInterface, this, Module.DalamudReflector);
+        ECommons.LanguageHelpers.Localization.Init("ChineseTraditional");
         EzConfig.PluginConfigDirectoryOverride = "NotificationMaster";
         new TickScheduler(() =>
         {
@@ -68,14 +69,14 @@ public class NotificationMaster : IDalamudPlugin
             {
                 configGui.open = true;
                 Notify.Warning(
-                    "You have installed NotificationMaster plugin. By default, it has no modules enabled. \n" +
-                    "A settings window has been opened: please configure the plugin.");
+                    ("You have installed NotificationMaster plugin. By default, it has no modules enabled. \n" +
+                    "A settings window has been opened: please configure the plugin.").Loc());
             }
             Svc.Commands.AddHandler("/pnotify", new CommandInfo(OnCommand)
             {
-                HelpMessage = "open/close configuration\n" +
+                HelpMessage = ("open/close configuration\n" +
                 "/pnotify shutup|s [time in minutes] - pause plugin for specified amount of minutes or until restart if time is not specified\n" +
-                "/pnotify resume|r - resume plugin operation"
+                "/pnotify resume|r - resume plugin operation").Loc()
             });
             IPC = new();
             NotificationMasterApi = new(Svc.PluginInterface);
@@ -97,29 +98,29 @@ public class NotificationMaster : IDalamudPlugin
                 if(args.Length == 1)
                 {
                     PauseUntil = long.MaxValue;
-                    Notify.Success("Plugin paused until restart");
+                    Notify.Success("Plugin paused until restart".Loc());
                 }
                 else
                 {
                     if(uint.TryParse(args[1], out var minutes))
                     {
                         PauseUntil = Environment.TickCount64 + minutes * 60 * 1000;
-                        Notify.Success($"Plugin paused for {minutes} minutes");
+                        Notify.Success("Plugin paused for ?? minutes".Loc(minutes));
                     }
                     else
                     {
-                        Notify.Error("Please enter amount of time in minutes");
+                        Notify.Error("Please enter amount of time in minutes".Loc());
                     }
                 }
             }
             else if(args[0].Equals("resume", StringComparison.OrdinalIgnoreCase) || args[0].Equals("r", StringComparison.OrdinalIgnoreCase))
             {
                 PauseUntil = 0;
-                Notify.Success("Plugin operation resumed");
+                Notify.Success("Plugin operation resumed".Loc());
             }
             else
             {
-                Notify.Error("Invanid command");
+                Notify.Error("Invanid command".Loc());
             }
         }
     }

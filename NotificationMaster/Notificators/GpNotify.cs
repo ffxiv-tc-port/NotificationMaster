@@ -23,7 +23,7 @@ internal unsafe class GpNotify : IDisposable
         Svc.Framework.Update += Tick;
         Svc.Commands.AddHandler("/gp", new CommandInfo(OnCommand)
         {
-            HelpMessage = "open config\n/gp <number> → set trigger GP amount"
+            HelpMessage = "open config\n/gp <number> → set trigger GP amount".Loc()
         });
     }
 
@@ -40,18 +40,18 @@ internal unsafe class GpNotify : IDisposable
                 var newgp = int.Parse(arguments.Trim());
                 if(newgp < 0)
                 {
-                    Notify.Error("GP can't be negative");
+                    Notify.Error("GP can't be negative".Loc());
                 }
                 else
                 {
                     p.cfg.gp_GPTreshold = newgp;
                     p.cfg.Save();
-                    Notify.Success("Trigger GP amount set to " + p.cfg.gp_GPTreshold);
+                    Notify.Success("Trigger GP amount set to ??".Loc(p.cfg.gp_GPTreshold));
                 }
             }
             catch(Exception e)
             {
-                Notify.Error("Error: " + e.Message);
+                Notify.Error("Error: ??".Loc(e.Message));
             }
         }
     }
@@ -61,17 +61,17 @@ internal unsafe class GpNotify : IDisposable
         if(Environment.TickCount < nextTick) return;
         nextTick = Environment.TickCount + 5000;
         if(Svc.ClientState.LocalPlayer == null) return;
-        if((Svc.Objects.LocalPlayer.ClassJob.RowId != 16
-            && Svc.Objects.LocalPlayer.ClassJob.RowId != 17
-            && Svc.Objects.LocalPlayer.ClassJob.RowId != 18)
+        if((Svc.ClientState.LocalPlayer.ClassJob.RowId != 16
+            && Svc.ClientState.LocalPlayer.ClassJob.RowId != 17
+            && Svc.ClientState.LocalPlayer.ClassJob.RowId != 18)
             || p.PauseUntil > Environment.TickCount64)
         {
             needNotification = false;
             return;
         }
-        var gp = Svc.Objects.LocalPlayer.CurrentGp;
+        var gp = Svc.ClientState.LocalPlayer.CurrentGp;
         //pi.Framework.Gui.Chat.Print(actMgr.GetCooldown(ActionManager.PotionCDGroup).IsCooldown + "/" + actMgr.GetCooldown(ActionManager.PotionCDGroup).CooldownElapsed + "/" + actMgr.GetCooldown(ActionManager.PotionCDGroup).CooldownTotal);
-        if(FFXIVClientStructs.FFXIV.Client.Game.ActionManager.Instance()->GetRecastGroupDetail(PotionCDGroup)->IsActive == false) gp += (uint)p.cfg.gp_PotionCapacity;
+        if(FFXIVClientStructs.FFXIV.Client.Game.ActionManager.Instance()->GetRecastGroupDetail(PotionCDGroup)->IsActive == 0) gp += (uint)p.cfg.gp_PotionCapacity;
         //pi.Framework.Gui.Chat.Print(DateTimeOffset.Now + ": " + gp);
         if(gp >= p.cfg.gp_GPTreshold)
         {
@@ -88,7 +88,7 @@ internal unsafe class GpNotify : IDisposable
                     if(p.cfg.gp_AutoActivateWindow) Native.Impl.Activate();
                     if(p.cfg.gp_ShowToastNotification)
                     {
-                        TrayIconManager.ShowToast(gp + " GP ready!");
+                        TrayIconManager.ShowToast("?? GP ready!".Loc(gp));
                     }
 
                     if(p.cfg.gp_HttpRequestsEnable)

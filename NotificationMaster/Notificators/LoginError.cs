@@ -23,7 +23,7 @@ internal unsafe class LoginError : IDisposable
         if(!Svc.ClientState.IsLoggedIn)
         {
             var addonPtr = Svc.GameGui.GetAddonByName("Dialogue", 1);
-            if(addonPtr != IntPtr.Zero && ((AtkUnitBase*)addonPtr.Address)->IsVisible)
+            if(addonPtr != IntPtr.Zero && ((AtkUnitBase*)addonPtr)->IsVisible)
             {
                 if(!seenErrorWindow)
                 {
@@ -37,7 +37,7 @@ internal unsafe class LoginError : IDisposable
                         if(p.cfg.loginError_AutoActivateWindow) Native.Impl.Activate();
                         if(p.cfg.loginError_ShowToastNotification)
                         {
-                            TrayIconManager.ShowToast("Server connection error occurred!", "");
+                            TrayIconManager.ShowToast("Server connection error occurred!".Loc(), "");
                         }
                         if(p.cfg.loginError_HttpRequestsEnable)
                         {

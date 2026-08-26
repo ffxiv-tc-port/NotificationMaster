@@ -54,7 +54,7 @@ internal class CfPop : IDisposable
 
     private void DoNotify(string str, bool soonEnd = false)
     {
-        if(str == "") str = "Duty roulette";
+        if(str == "") str = "Duty roulette".Loc();
         if(p.cfg.cfPop_FlashTrayIcon)
         {
             Native.Impl.FlashWindow();
@@ -62,7 +62,7 @@ internal class CfPop : IDisposable
         if(p.cfg.cfPop_AutoActivateWindow) Native.Impl.Activate();
         if(p.cfg.cfPop_ShowToastNotification)
         {
-            TrayIconManager.ShowToast(str, soonEnd ? "Duty invitation expires in 15 seconds!" : "Duty pop");
+            TrayIconManager.ShowToast(str, soonEnd ? "Duty invitation expires in 15 seconds!".Loc() : "Duty pop".Loc());
         }
         if(p.cfg.cfPop_HttpRequestsEnable)
         {

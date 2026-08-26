@@ -46,7 +46,7 @@ internal class AudioSelector
                     ofn.maxFileTitle = ofn.fileTitle.Length;
 
                     ofn.initialDir = TryGetFolderFromPath(settings.SoundPath);
-                    ofn.title = "Select a sound file";
+                    ofn.title = "Select a sound file".Loc();
 
                     PluginLog.Information("Preparing to call winapi");
                     if(Native.GetOpenFileName(ofn))
@@ -63,7 +63,7 @@ internal class AudioSelector
                     PluginLog.Error(e.Message + "\n" + e.StackTrace ?? "");
                     new TickScheduler(delegate
                     {
-                        Notify.Error($"Error: {e.Message}");
+                        Notify.Error("Error: ??".Loc(e.Message));
                     });
                 }
                 SelectorSemaphore.Release();
@@ -72,7 +72,7 @@ internal class AudioSelector
         }
         else
         {
-            Notify.Error("Failed to open file dialog");
+            Notify.Error("Failed to open file dialog".Loc());
         }
     }
 

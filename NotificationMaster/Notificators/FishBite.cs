@@ -13,6 +13,18 @@ public enum FishBiteType : byte
     None = 255,
 }
 
+// NOTE: TC's bundled FFXIVClientStructs only exposes FishingEventHandler as a generic
+// EventHandler* (no dedicated FishingEventHandler struct/State field like newer versions),
+// so the real fishing bite state can't be read on this API generation. This is a stand-in
+// enum just so the rest of the file compiles; GetFishingState() below always returns None,
+// so the fish-bite notification feature is a known no-op on TC until this data becomes
+// available (same category of gap as vnavmesh's ZoneSharedGroup / Accountant's AirshipManager).
+public enum FishingState
+{
+    None,
+    Bite,
+}
+
 internal class FishBite : IDisposable
 {
     private NotificationMaster p;
@@ -40,11 +52,9 @@ internal class FishBite : IDisposable
 
     private static unsafe FishingState GetFishingState()
     {
-        var ef = EventFramework.Instance();
-        if (ef == null) return FishingState.None;
-        var handler = ef->EventHandlerModule.FishingEventHandler;
-        if (handler == null) return FishingState.None;
-        return handler->State;
+        // See the NOTE above FishingState's declaration - TC's FFXIVClientStructs doesn't
+        // expose a typed State field on this API generation, so this is always None.
+        return FishingState.None;
     }
 
     public void Dispose()
@@ -118,12 +128,26 @@ internal class FishBite : IDisposable
 
         if (p.cfg.fishBite_ShowToastNotification)
         {
-            TrayIconManager.ShowToast($"{char.ToUpper(biteName[0]) + biteName[1..]} bite!", "Fish hooked");
+            var biteTitle = bite switch
+            {
+                FishBiteType.Light => "Light bite!".Loc(),
+                FishBiteType.Medium => "Medium bite!".Loc(),
+                FishBiteType.Heavy => "Heavy bite!".Loc(),
+                _ => $"{char.ToUpper(biteName[0]) + biteName[1..]} bite!"
+            };
+            TrayIconManager.ShowToast(biteTitle, "Fish hooked".Loc());
         }
 
         if (p.cfg.fishBite_ChatMessage)
         {
-            Svc.Chat.Print($"[FishNotify] You hook a fish with a {biteName} bite.");
+            var biteWord = bite switch
+            {
+                FishBiteType.Light => "light".Loc(),
+                FishBiteType.Medium => "medium".Loc(),
+                FishBiteType.Heavy => "heavy".Loc(),
+                _ => biteName
+            };
+            Svc.Chat.Print("[FishNotify] You hook a fish with a ?? bite.".Loc(biteWord));
         }
 
         var soundSettings = bite switch
@@ -217,12 +241,12 @@ internal class FishBite : IDisposable
             p.cfg.fishBite_AutoActivateWindow = false;
 
             p.cfg.Save();
-            Notify.Success("Fish Notify settings reset to defaults");
+            Notify.Success("Fish Notify settings reset to defaults".Loc());
         }
         catch (Exception e)
         {
             PluginLog.Error($"FishBite: Failed to reset to defaults: {e.Message}\n{e.StackTrace ?? ""}");
-            Notify.Error("Failed to reset settings");
+            Notify.Error("Failed to reset settings".Loc());
         }
     }
 

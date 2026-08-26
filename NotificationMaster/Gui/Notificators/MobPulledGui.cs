@@ -1,4 +1,4 @@
-﻿namespace NotificationMaster;
+namespace NotificationMaster;
 
 internal partial class ConfigGui
 {
@@ -9,7 +9,7 @@ internal partial class ConfigGui
     private int tCounter = 0;
     internal void DrawMobPulledConfig()
     {
-        if(ImGui.Checkbox("Enable", ref p.cfg.mobPulled_Enable))
+        if(ImGui.Checkbox("Enable".Loc(), ref p.cfg.mobPulled_Enable))
         {
             MobPulled.Setup(p.cfg.mobPulled_Enable, p);
         }
@@ -23,29 +23,31 @@ internal partial class ConfigGui
                 p.mobPulled.RebuildMobNames();
                 p.mobPulled.ClearIgnoredMobs();
             }
-            ImGui.TextColored(ImGuiColors.DalamudOrange, "Please note that is required that you CAN SEE the mob for plugin to detect it's pull.\n" +
+            ImGui.TextColored(ImGuiColors.DalamudOrange, ("Please note that is required that you CAN SEE the mob for plugin to detect it's pull.\n" +
                 "If your area is extremely congested, A ranks may disappear.\n" +
-                "S/SS should always be visible, however. Solution to this problem will come at a later date.");
-            ImGui.Text($"When mob from list in specified zones is pulled, do the following{(p.cfg.mobPulled_AlwaysExecute ? "" : " if FFXIV is running in background")}:");
-            ImGui.Checkbox("Show tray notification", ref p.cfg.mobPulled_ShowToastNotification);
-            ImGui.Checkbox("Flash taskbar icon", ref p.cfg.mobPulled_FlashTrayIcon);
-            ImGui.Checkbox("Bring FFXIV to foreground", ref p.cfg.mobPulled_AutoActivateWindow);
+                "S/SS should always be visible, however. Solution to this problem will come at a later date.").Loc());
+            ImGui.Text((p.cfg.mobPulled_AlwaysExecute
+                ? "When mob from list in specified zones is pulled, do the following:"
+                : "When mob from list in specified zones is pulled, do the following if FFXIV is running in background:").Loc());
+            ImGui.Checkbox("Show tray notification".Loc(), ref p.cfg.mobPulled_ShowToastNotification);
+            ImGui.Checkbox("Flash taskbar icon".Loc(), ref p.cfg.mobPulled_FlashTrayIcon);
+            ImGui.Checkbox("Bring FFXIV to foreground".Loc(), ref p.cfg.mobPulled_AutoActivateWindow);
             ForegroundWarning(p.cfg.mobPulled_AutoActivateWindow);
-            ImGui.Checkbox("Print warning in chat", ref p.cfg.mobPulled_ChatMessage);
-            ImGui.Checkbox("Display an in-game toast", ref p.cfg.mobPulled_Toast);
+            ImGui.Checkbox("Print warning in chat".Loc(), ref p.cfg.mobPulled_ChatMessage);
+            ImGui.Checkbox("Display an in-game toast".Loc(), ref p.cfg.mobPulled_Toast);
             DrawSoundSettings(ref p.cfg.mobPulled_SoundSettings);
             ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudOrange);
-            ImGui.Checkbox("Execute actions even if game is active", ref p.cfg.mobPulled_AlwaysExecute);
+            ImGui.Checkbox("Execute actions even if game is active".Loc(), ref p.cfg.mobPulled_AlwaysExecute);
             ImGui.PopStyleColor();
             DrawHttpMaster(p.cfg.mobPulled_HttpRequests, ref p.cfg.mobPulled_HttpRequestsEnable,
-                "$M - mob name");
-            if(ImGui.CollapsingHeader($"List of watched mobs (currently contains {p.cfg.mobPulled_Names.Count})###MPListmobs"))
+                "$M - mob name".Loc());
+            if(ImGui.CollapsingHeader("List of watched mobs (currently contains ??)".Loc(p.cfg.mobPulled_Names.Count) + "###MPListmobs"))
             {
-                ImGui.Checkbox("Allow deleting entries", ref mobAllowDeleting);
+                ImGui.Checkbox("Allow deleting entries".Loc(), ref mobAllowDeleting);
                 if(p.cfg.mobPulled_Names.Count > 0)
                 {
                     ImGui.SameLine();
-                    if(ImGui.Button("Export mob names to clipboard"))
+                    if(ImGui.Button("Export mob names to clipboard".Loc()))
                     {
                         ImGui.SetClipboardText(string.Join("\n", p.cfg.mobPulled_Names));
                     }
@@ -54,7 +56,7 @@ internal partial class ConfigGui
                 {
                     if(mobAllowDeleting)
                     {
-                        if(ImGui.SmallButton($"Delete##{s.GetHashCode()}"))
+                        if(ImGui.SmallButton("Delete".Loc() + $"##{s.GetHashCode()}"))
                         {
                             mobToDelete = s;
                         }
@@ -62,10 +64,10 @@ internal partial class ConfigGui
                     }
                     ImGui.Text(s);
                 }
-                ImGui.TextColored(ImGuiColors.DalamudOrange, "Add mobs (one per line; case sensitive; extra spaces will be trimmed; duplicates will be removed)");
+                ImGui.TextColored(ImGuiColors.DalamudOrange, "Add mobs (one per line; case sensitive; extra spaces will be trimmed; duplicates will be removed)".Loc());
                 ImGui.InputTextMultiline("##addMobs", ref mobsToAdd, 100000,
                     new Vector2(ImGui.GetContentRegionAvail().X, Math.Min((mobsToAdd.Split('\n').Length + 1) * ImGui.CalcTextSize("AAAAAAAA").Y, 300f)));
-                if(ImGui.Button($"Add mobs"))
+                if(ImGui.Button("Add mobs".Loc()))
                 {
                     foreach(var mob in mobsToAdd.Split("\n"))
                     {
@@ -81,14 +83,14 @@ internal partial class ConfigGui
                 }
             }
 
-            if(ImGui.CollapsingHeader($"List of territories where module will be enabled, currently has {p.cfg.mobPulled_Territories.Count} entries###MPListOfTerr"))
+            if(ImGui.CollapsingHeader("List of territories where module will be enabled, currently has ?? entries".Loc(p.cfg.mobPulled_Territories.Count) + "###MPListOfTerr"))
             {
                 ImGui.SetNextItemWidth(200f);
-                ImGui.InputTextWithHint("##terrSearch", "Filter...", ref terrSearchOptions.filter, 100);
+                ImGui.InputTextWithHint("##terrSearch", "Filter...".Loc(), ref terrSearchOptions.filter, 100);
                 ImGui.SameLine();
-                ImGui.Checkbox("Only world zones", ref terrSearchOptions.onlyWorld);
+                ImGui.Checkbox("Only world zones".Loc(), ref terrSearchOptions.onlyWorld);
                 ImGui.SameLine();
-                ImGui.Checkbox("Only selected", ref terrSearchOptions.onlySelected);
+                ImGui.Checkbox("Only selected".Loc(), ref terrSearchOptions.onlySelected);
                 if(p.mobPulled.territories.TryGetValue(Svc.ClientState.TerritoryType, out var v))
                 {
                     MPPrintZone(Svc.ClientState.TerritoryType, v);
@@ -104,7 +106,7 @@ internal partial class ConfigGui
     private void MPPrintZone(uint territoryType, (string name, bool isWorld) v)
     {
         tCounter++;
-        var cname = $"{territoryType} | {v.name}{(v.isWorld ? " (world zone)" : "")}";
+        var cname = $"{territoryType} | {v.name}{(v.isWorld ? " (world zone)".Loc() : "")}";
         if(terrSearchOptions.filter.Length > 0 && !cname.Contains(terrSearchOptions.filter, StringComparison.OrdinalIgnoreCase)) return;
         if(terrSearchOptions.onlyWorld && !v.isWorld) return;
         if(terrSearchOptions.onlySelected && !p.cfg.mobPulled_Territories.Contains(territoryType)) return;

@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Utility;
+using Dalamud.Interface.Utility;
 using ECommons.Funding;
 
 namespace NotificationMaster;
@@ -24,11 +24,11 @@ internal partial class ConfigGui : IDisposable
         if(p.PauseUntil > Environment.TickCount64)
         {
             ImGuiHelpers.ForceNextWindowMainViewport();
-            var sb = new StringBuilder("NotificationMaster is paused");
+            var sb = new StringBuilder("NotificationMaster is paused".Loc());
             if(p.PauseUntil != long.MaxValue)
             {
                 var ts = TimeSpan.FromMilliseconds(p.PauseUntil - Environment.TickCount64);
-                sb.Append($" for {(ts.Days * 60 + ts.Hours):D2}:{ts.Minutes:D2}:{ts.Seconds:D2}");
+                sb.Append(" for ??".Loc($"{(ts.Days * 60 + ts.Hours):D2}:{ts.Minutes:D2}:{ts.Seconds:D2}"));
             }
             var text = sb.ToString();
             var dims = ImGui.CalcTextSize(text);
@@ -46,25 +46,25 @@ internal partial class ConfigGui : IDisposable
         {
 
             ImGui.PushStyleVar(ImGuiStyleVar.WindowMinSize, new Vector2(650f, 200f));
-            if(ImGui.Begin("NotificationMaster configuration", ref open))
+            if(ImGui.Begin("NotificationMaster configuration".Loc(), ref open))
             {
                 if(p.fileSelector.IsSelecting())
                 {
-                    ImGui.Text("Awaiting file selection...");
+                    ImGui.Text("Awaiting file selection...".Loc());
                 }
                 else
                 {
                     PatreonBanner.DrawRight();
                     ImGui.BeginTabBar("##NMtabs");
-                    DrawTab("GP replenish", DrawGpNotify, p.cfg.gp_Enable);
-                    DrawTab("Cutscene ending", DrawCutsceneConfig, p.cfg.cutscene_Enable);
-                    DrawTab("Chat message", DrawChatMessageGui, p.cfg.chatMessage_Enable);
-                    DrawTab("Duty pop", DrawCfPopConfig, p.cfg.cfPop_Enable);
-                    DrawTab("Connection error", DrawLoginErrorConfig, p.cfg.loginError_Enable);
-                    DrawTab("Approaching map flag", DrawMapFlagConfig, p.cfg.mapFlag_Enable);
-                    DrawTab("Mob pulled", DrawMobPulledConfig, p.cfg.mobPulled_Enable);
-                    DrawTab("PartyFinder", DrawPartyFinderConfig, p.cfg.partyFinder_Enable);
-                    DrawTab("Fish Notify", DrawFishBiteConfig, p.cfg.fishBite_Enable);
+                    DrawTab("GP replenish".Loc(), DrawGpNotify, p.cfg.gp_Enable);
+                    DrawTab("Cutscene ending".Loc(), DrawCutsceneConfig, p.cfg.cutscene_Enable);
+                    DrawTab("Chat message".Loc(), DrawChatMessageGui, p.cfg.chatMessage_Enable);
+                    DrawTab("Duty pop".Loc(), DrawCfPopConfig, p.cfg.cfPop_Enable);
+                    DrawTab("Connection error".Loc(), DrawLoginErrorConfig, p.cfg.loginError_Enable);
+                    DrawTab("Approaching map flag".Loc(), DrawMapFlagConfig, p.cfg.mapFlag_Enable);
+                    DrawTab("Mob pulled".Loc(), DrawMobPulledConfig, p.cfg.mobPulled_Enable);
+                    DrawTab("PartyFinder".Loc(), DrawPartyFinderConfig, p.cfg.partyFinder_Enable);
+                    DrawTab("Fish Notify".Loc(), DrawFishBiteConfig, p.cfg.fishBite_Enable);
                     PatreonBanner.RightTransparentTab();
                     ImGui.EndTabBar();
                 }
@@ -73,7 +73,7 @@ internal partial class ConfigGui : IDisposable
             if(!open)
             {
                 p.cfg.Save();
-                Notify.Success("Configuration saved");
+                Notify.Success("Configuration saved".Loc());
             }
             ImGui.PopStyleVar();
         }
@@ -105,7 +105,7 @@ internal partial class ConfigGui : IDisposable
     {
         if(display)
         {
-            ImGui.TextColored(ImGuiColors.DalamudRed, "Unfortunately bringing FFXIV to foreground isn't very reliable function.\nIf it fails to work for you - not much can be done.");
+            ImGui.TextColored(ImGuiColors.DalamudRed, "Unfortunately bringing FFXIV to foreground isn't very reliable function.\nIf it fails to work for you - not much can be done.".Loc());
         }
     }
 }

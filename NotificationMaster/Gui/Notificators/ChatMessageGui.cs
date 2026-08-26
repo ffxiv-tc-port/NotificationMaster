@@ -1,35 +1,36 @@
-﻿using Dalamud.Game.Text;
+using Dalamud.Game.Text;
 
 namespace NotificationMaster;
 
 internal partial class ConfigGui
 {
     private int CustomTypeToAdd = 0;
+    private static string[] compareTypesLoc = null;
     internal void DrawChatMessageGui()
     {
         var id = 0;
         var toDelete = -1;
-        if(ImGui.Checkbox("Enable", ref p.cfg.chatMessage_Enable))
+        if(ImGui.Checkbox("Enable".Loc(), ref p.cfg.chatMessage_Enable))
         {
             ChatMessage.Setup(p.cfg.chatMessage_Enable, p);
         }
         if(p.cfg.chatMessage_Enable)
         {
             //ImGui.TextColored(ImGui.ColorConvertU32ToFloat4(0xff0000ff), "Triggers are paused while configuration is open.");
-            ImGui.TextWrapped("When chat message matching any rule received, if FFXIV is running in background:");
-            ImGui.Checkbox("Show tray notification", ref p.cfg.chatMessage_ShowToastNotification);
-            ImGui.Checkbox("Flash taskbar icon", ref p.cfg.chatMessage_FlashTrayIcon);
-            ImGui.Checkbox("Bring FFXIV to foreground", ref p.cfg.chatMessage_AutoActivateWindow);
-            ImGui.Checkbox("Execute actions even if game is active", ref p.cfg.chatMessage_AlwaysExecute);
+            ImGui.TextWrapped("When chat message matching any rule received, if FFXIV is running in background:".Loc());
+            ImGui.Checkbox("Show tray notification".Loc(), ref p.cfg.chatMessage_ShowToastNotification);
+            ImGui.Checkbox("Flash taskbar icon".Loc(), ref p.cfg.chatMessage_FlashTrayIcon);
+            ImGui.Checkbox("Bring FFXIV to foreground".Loc(), ref p.cfg.chatMessage_AutoActivateWindow);
+            ImGui.Checkbox("Execute actions even if game is active".Loc(), ref p.cfg.chatMessage_AlwaysExecute);
             ForegroundWarning(p.cfg.chatMessage_AutoActivateWindow);
             DrawSoundSettings(ref p.cfg.chatMessage_SoundSettings);
             DrawHttpMaster(p.cfg.chatMessage_HttpRequests, ref p.cfg.chatMessage_HttpRequestsEnable,
-                "$S - sender\n$M - message\n$T - chat type");
+                "$S - sender\n$M - message\n$T - chat type".Loc());
             ImGui.Separator();
-            if(ImGui.CollapsingHeader("Triggers"))
+            if(ImGui.CollapsingHeader("Triggers".Loc()))
             {
                 //ImGui.BeginChild("##trigs");
-                if(ImGui.Button("Add"))
+                if(ImGui.Button("Add".Loc()))
                 {
                     p.cfg.chatMessage_Elements.Add(new ChatMessageElement());
                 }
@@ -39,15 +40,15 @@ internal partial class ConfigGui
                 ImGui.SetColumnWidth(2, ImGuiEx.GetWindowContentRegionWidth() - 150 - 150 - 100 - 40);
                 ImGui.SetColumnWidth(3, 100f);
                 ImGui.SetColumnWidth(4, 40f);
-                ImGui.Text("Type");
+                ImGui.Text("Type".Loc());
                 ImGui.NextColumn();
-                ImGui.Text("Sender");
+                ImGui.Text("Sender".Loc());
                 ImGui.NextColumn();
-                ImGui.Text("Message");
+                ImGui.Text("Message".Loc());
                 ImGui.NextColumn();
-                ImGui.Text("Search mode");
+                ImGui.Text("Search mode".Loc());
                 ImGui.NextColumn();
-                ImGui.Text("Del");
+                ImGui.Text("Del".Loc());
                 ImGui.NextColumn();
                 ImGui.Columns(1);
                 for(var i = 0; i < p.cfg.chatMessage_Elements.Count; i++)
@@ -55,7 +56,7 @@ internal partial class ConfigGui
                     var elem = p.cfg.chatMessage_Elements[i];
                     ImGui.Columns(5);
                     ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-                    if(ImGui.BeginCombo("##fselect" + i, elem.ChatTypes.Count == 0 ? "Any" : elem.ChatTypes.Count == 1 ? ((XivChatType)elem.ChatTypes.First()).ToString() : $"{elem.ChatTypes.Count} types"))
+                    if(ImGui.BeginCombo("##fselect" + i, elem.ChatTypes.Count == 0 ? "Any".Loc() : elem.ChatTypes.Count == 1 ? ((XivChatType)elem.ChatTypes.First()).ToString() : "?? types".Loc(elem.ChatTypes.Count)))
                     {
                         var customElements = new HashSet<ushort>(elem.ChatTypes);
                         customElements.RemoveWhere(p => Enum.GetValues<XivChatType>().ToHashSet().Contains((XivChatType)p));
@@ -76,7 +77,7 @@ internal partial class ConfigGui
                         ImGui.SetNextItemWidth(50f);
                         ImGui.InputInt("##typecustom" + i, ref CustomTypeToAdd, 0, 0);
                         ImGui.SameLine();
-                        if(ImGui.Button("Add custom type"))
+                        if(ImGui.Button("Add custom type".Loc()))
                         {
                             elem.ChatTypes.Add((ushort)CustomTypeToAdd);
                             CustomTypeToAdd = 0;
@@ -91,7 +92,8 @@ internal partial class ConfigGui
                     ImGui.InputText("##f3" + i, ref elem.MessageStr, 1000);
                     ImGui.NextColumn();
                     ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-                    ImGui.Combo("##f4" + i, ref elem.CompareType, ChatMessageElement.CompareTypes, ChatMessageElement.CompareTypes.Length);
+                    compareTypesLoc ??= ChatMessageElement.CompareTypes.Select(x => x.Loc()).ToArray();
+                    ImGui.Combo("##f4" + i, ref elem.CompareType, compareTypesLoc, compareTypesLoc.Length);
                     ImGui.NextColumn();
                     if(ImGui.Button("[X]##del" + i))
                     {
@@ -99,15 +101,15 @@ internal partial class ConfigGui
                     }
                     ImGui.NextColumn();
                     ImGui.Columns(1);
-                    ImGui.Text("Exceptions:");
+                    ImGui.Text("Exceptions:".Loc());
                     ImGui.SameLine();
-                    ImGui.Checkbox("No flashing##" + i, ref elem.NoFlash);
+                    ImGui.Checkbox("No flashing".Loc() + "##" + i, ref elem.NoFlash);
                     ImGui.SameLine();
-                    ImGui.Checkbox("No bring to foreground##" + i, ref elem.NoForeground);
+                    ImGui.Checkbox("No bring to foreground".Loc() + "##" + i, ref elem.NoForeground);
                     ImGui.SameLine();
-                    ImGui.Checkbox("No toast##" + i, ref elem.NoToast);
+                    ImGui.Checkbox("No toast".Loc() + "##" + i, ref elem.NoToast);
                     ImGui.SameLine();
-                    ImGui.Checkbox("No HTTP##" + i, ref elem.NoHTTP);
+                    ImGui.Checkbox("No HTTP".Loc() + "##" + i, ref elem.NoHTTP);
                     ImGui.Separator();
                 }
                 //ImGui.EndChild();
@@ -124,18 +126,18 @@ internal partial class ConfigGui
                 }
                 toDelete = -1;
             }
-            if(ImGui.CollapsingHeader("Message log"))
+            if(ImGui.CollapsingHeader("Message log".Loc()))
             {
                 //ImGui.BeginChild("##nm_chatlog");
-                ImGui.Checkbox("Pause log", ref p.chatMessage.pause);
+                ImGui.Checkbox("Pause log".Loc(), ref p.chatMessage.pause);
                 if(p.chatMessage != null)
                 {
                     ImGui.Columns(3);
-                    ImGui.Text("Type");
+                    ImGui.Text("Type".Loc());
                     ImGui.NextColumn();
-                    ImGui.Text("Sender");
+                    ImGui.Text("Sender".Loc());
                     ImGui.NextColumn();
-                    ImGui.Text("Message");
+                    ImGui.Text("Message".Loc());
                     ImGui.NextColumn();
                     ImGui.Columns(1);
                     foreach(var e in p.chatMessage.ChatLog)
@@ -170,7 +172,7 @@ internal partial class ConfigGui
                 }
                 else
                 {
-                    ImGui.Text("Error");
+                    ImGui.Text("Error".Loc());
                 }
                 //ImGui.EndChild();
             }

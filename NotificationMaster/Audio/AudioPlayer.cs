@@ -107,7 +107,7 @@ internal class AudioPlayer : IDisposable
                         new TickScheduler(delegate
                         {
                             Notify.Error(
-                                $"Error during playing audio file:\n{e.Message}");
+                                "Error during playing audio file:\n??".Loc(e.Message));
                         });
                     }
                     PluginLog.Debug($"Stopping playing {audio.path}");
