@@ -96,6 +96,45 @@ internal class Configuration : IEzConfig
     public SoundSettings partyFinder_SoundSettings = new();
     public bool partyFinder_AlwaysExecute = true;
 
+    public bool dutyStart_Enable = false;
+    public bool dutyStart_ShowToastNotification = true;
+    public bool dutyStart_FlashTrayIcon = true;
+    public bool dutyStart_AutoActivateWindow = false;
+    public bool dutyStart_NotifyRecommence = false;
+    public bool dutyStart_HttpRequestsEnable = false;
+    public List<HttpRequestElement> dutyStart_HttpRequests = [];
+    public SoundSettings dutyStart_SoundSettings = new();
+    public bool dutyStart_AlwaysExecute = false;
+
+    public bool readyCheck_Enable = false;
+    public bool readyCheck_ShowToastNotification = true;
+    public bool readyCheck_FlashTrayIcon = true;
+    public bool readyCheck_AutoActivateWindow = false;
+    public bool readyCheck_HttpRequestsEnable = false;
+    public List<HttpRequestElement> readyCheck_HttpRequests = [];
+    public SoundSettings readyCheck_SoundSettings = new();
+    public bool readyCheck_AlwaysExecute = false;
+
+    public bool partyCutscene_Enable = false;
+    public bool partyCutscene_ShowToastNotification = true;
+    public bool partyCutscene_FlashTrayIcon = true;
+    public bool partyCutscene_AutoActivateWindow = false;
+    public bool partyCutscene_ChatMessage = true;
+    public int partyCutscene_MinSeconds = 4;
+    public bool partyCutscene_HttpRequestsEnable = false;
+    public List<HttpRequestElement> partyCutscene_HttpRequests = [];
+    public SoundSettings partyCutscene_SoundSettings = new();
+    public bool partyCutscene_AlwaysExecute = true;
+
+    public bool countdown_Enable = false;
+    public bool countdown_ShowToastNotification = true;
+    public bool countdown_FlashTrayIcon = true;
+    public bool countdown_AutoActivateWindow = false;
+    public bool countdown_HttpRequestsEnable = false;
+    public List<HttpRequestElement> countdown_HttpRequests = [];
+    public SoundSettings countdown_SoundSettings = new();
+    public bool countdown_AlwaysExecute = false;
+
     public bool fishBite_Enable = false;
     public bool fishBite_ShowToastNotification = false;
     public bool fishBite_FlashTrayIcon = true;

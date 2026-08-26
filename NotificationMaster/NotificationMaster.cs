@@ -21,6 +21,10 @@ public class NotificationMaster : IDalamudPlugin
     internal MobPulled mobPulled = null;
     internal PartyFinder partyFinder = null;
     internal FishBite fishBite = null;
+    internal DutyStarted dutyStarted = null;
+    internal ReadyCheck readyCheck = null;
+    internal PartyCutsceneEnded partyCutsceneEnded = null;
+    internal BattleCountdown battleCountdown = null;
 
     internal HttpMaster httpMaster;
     public ThreadUpdateActivatedState ThreadUpdActivated;
@@ -64,6 +68,10 @@ public class NotificationMaster : IDalamudPlugin
             if(cfg.mobPulled_Enable) MobPulled.Setup(true, this);
             if(cfg.partyFinder_Enable) PartyFinder.Setup(true, this);
             if(cfg.fishBite_Enable) FishBite.Setup(true, this);
+            if(cfg.dutyStart_Enable) DutyStarted.Setup(true, this);
+            if(cfg.readyCheck_Enable) ReadyCheck.Setup(true, this);
+            if(cfg.partyCutscene_Enable) PartyCutsceneEnded.Setup(true, this);
+            if(cfg.countdown_Enable) BattleCountdown.Setup(true, this);
 
             if(Svc.PluginInterface.Reason == PluginLoadReason.Installer)
             {
@@ -135,7 +143,12 @@ public class NotificationMaster : IDalamudPlugin
         LoginError.Setup(false, this);
         ApproachingMapFlag.Setup(false, this);
         MobPulled.Setup(false, this);
+        PartyFinder.Setup(false, this);
         FishBite.Setup(false, this);
+        DutyStarted.Setup(false, this);
+        ReadyCheck.Setup(false, this);
+        PartyCutsceneEnded.Setup(false, this);
+        BattleCountdown.Setup(false, this);
         ThreadUpdActivated.Dispose();
         audioPlayer.Dispose();
         cfg.Save();

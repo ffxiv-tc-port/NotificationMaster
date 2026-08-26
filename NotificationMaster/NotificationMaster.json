@@ -2,11 +2,11 @@
   "Name": "NotificationMaster",
   "Author": "NightmareXIV",
   "Description": "在遊戲視窗縮到最小時，通知你各種遊戲內事件。",
-  "Punchline": "目前支援的通知：聊天訊息、接近地圖標記、已找到任務、過場動畫結束、GP 恢復、登入時發生錯誤、怪物已被拉起。",
+  "Punchline": "目前支援的通知：聊天訊息、接近地圖標記、已找到任務、過場動畫結束、GP 恢復、登入時發生錯誤、怪物已被拉起、任務開始、準備確認、隊友看完過場動畫。",
   "RepoUrl": "https://github.com/ffxiv-tc-port/NotificationMaster",
   "IconUrl": "https://raw.githubusercontent.com/ffxiv-tc-port/DalamudPluginsTC/main/icons/NotificationMaster.png",
     "Tags": [
         "notification"
     ],
-    "DalamudApiLevel": 12
+    "DalamudApiLevel": 13
 }

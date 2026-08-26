@@ -27,17 +27,17 @@ internal unsafe partial class ConfigGui
             ImGui.Text("Flag X: ??".Loc(p.mapFlag.flagX));
             ImGui.SetCursorPosX(500f);
             ImGui.Text("Flag Y: ??".Loc(p.mapFlag.flagY));
-            if(Svc.ClientState.LocalPlayer != null)
+            if(Svc.Objects.LocalPlayer != null)
             {
                 ImGui.SetCursorPosX(500f);
-                ImGui.Text("Player X: ??".Loc(Svc.ClientState.LocalPlayer.Position.X));
+                ImGui.Text("Player X: ??".Loc(Svc.Objects.LocalPlayer.Position.X));
                 ImGui.SetCursorPosX(500f);
-                ImGui.Text("Player Y: ??".Loc(Svc.ClientState.LocalPlayer.Position.Z));
+                ImGui.Text("Player Y: ??".Loc(Svc.Objects.LocalPlayer.Position.Z));
                 ImGui.SetCursorPosX(500f);
                 ImGui.Text("Territory: ??".Loc(Svc.ClientState.TerritoryType));
                 ImGui.SetCursorPosX(500f);
                 distance = Vector2.Distance(new Vector2(p.mapFlag.flagX, p.mapFlag.flagY),
-                    new Vector2(Svc.ClientState.LocalPlayer.Position.X, Svc.ClientState.LocalPlayer.Position.Z));
+                    new Vector2(Svc.Objects.LocalPlayer.Position.X, Svc.Objects.LocalPlayer.Position.Z));
                 ImGui.Text("Distance: ??".Loc(distance));
             }
             ImGui.PopStyleColor();

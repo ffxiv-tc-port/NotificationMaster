@@ -65,6 +65,10 @@ internal partial class ConfigGui : IDisposable
                     DrawTab("Mob pulled".Loc(), DrawMobPulledConfig, p.cfg.mobPulled_Enable);
                     DrawTab("PartyFinder".Loc(), DrawPartyFinderConfig, p.cfg.partyFinder_Enable);
                     DrawTab("Fish Notify".Loc(), DrawFishBiteConfig, p.cfg.fishBite_Enable);
+                    DrawTab("Duty start".Loc(), DrawDutyStartedConfig, p.cfg.dutyStart_Enable);
+                    DrawTab("Ready check".Loc(), DrawReadyCheckConfig, p.cfg.readyCheck_Enable);
+                    DrawTab("Party cutscene".Loc(), DrawPartyCutsceneConfig, p.cfg.partyCutscene_Enable);
+                    DrawTab("Battle countdown".Loc(), DrawBattleCountdownConfig, p.cfg.countdown_Enable);
                     PatreonBanner.RightTransparentTab();
                     ImGui.EndTabBar();
                 }

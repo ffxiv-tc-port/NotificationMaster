@@ -70,7 +70,7 @@ internal unsafe class PartyFinder : IDisposable
 
     private void ShowLogMessageDetour(RaptureLogModule* module, uint id)
     {
-        ShowLogMessageHook.Original(module, id);
+        ShowLogMessageHook.OriginalDisposeSafe(module, id);
 
         if(p.cfg.partyFinder_Delisted && (id == 981 || id == 982 || id == 985 || id == 986 || id == 7448))
         {
