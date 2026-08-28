@@ -60,7 +60,7 @@ internal unsafe class ApproachingMapFlag
     private bool DirectionY;
     private void ApproachingMapFlagWatcher(object _)
     {
-        if(p.PauseUntil > Environment.TickCount64 || (Utils.IsApplicationActivated || p.cfg.mapFlag_AlwaysExecute) || Svc.Objects.LocalPlayer == null ||
+        if(p.PauseUntil > Environment.TickCount64 || (Utils.IsApplicationActivated && !p.cfg.mapFlag_AlwaysExecute) || Svc.Objects.LocalPlayer == null ||
             Svc.Condition[ConditionFlag.BetweenAreas] || Svc.Condition[ConditionFlag.BetweenAreas51] ||
              isFlagSet == false || flagTerritory != Svc.ClientState.TerritoryType)
         {
@@ -116,8 +116,9 @@ internal unsafe class ApproachingMapFlag
     {
         // 到達距離／越過 X 軸／越過 Y 軸三個觸發點都經過這裡；一次性判定（HasTriggered、
         // UpdateDirections）與 TriggerOnCross 開關由呼叫點既有的條件負責，這裡不再自己節流。
-        // ⚠️ 與其他模組不同，這個模組的整個偵測狀態機只在「遊戲不在前景」時才跑
-        // （見 ApproachingMapFlagWatcher 開頭的條件），所以語音同樣只在背景時出聲。
+        // ⚠️ 與其他模組不同，這個模組的整個偵測狀態機平常只在「遊戲不在前景」時才跑
+        // （見 ApproachingMapFlagWatcher 開頭的條件），所以語音同樣只在背景時出聲；
+        // 勾了「即使前景也執行」（mapFlag_AlwaysExecute）後前景也會跑，語音也跟著出聲。
         if(p.cfg.mapFlag_TataruPraise) TataruPraiseBridge.Praise(TataruPraiseBridge.CategoryMapFlag);
         if(p.cfg.mapFlag_FlashTrayIcon)
         {
