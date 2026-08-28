@@ -77,6 +77,8 @@ internal class PartyCutsceneEnded : IDisposable
             // ignore short transition states to avoid false positives
             if(elapsed >= TimeSpan.FromSeconds(Math.Max(1, p.cfg.partyCutscene_MinSeconds)))
             {
+                // 見 TataruPraiseBridge：語音提醒不跟「只在背景時通知」的規則走。
+                if(p.cfg.partyCutscene_TataruPraise) TataruPraiseBridge.Praise(TataruPraiseBridge.CategoryCutsceneEnded);
                 DoNotify((int)elapsed.TotalSeconds);
             }
         }

@@ -105,6 +105,7 @@ internal class Configuration : IEzConfig
     public List<HttpRequestElement> dutyStart_HttpRequests = [];
     public SoundSettings dutyStart_SoundSettings = new();
     public bool dutyStart_AlwaysExecute = false;
+    public bool dutyStart_TataruPraise = true;
 
     public bool readyCheck_Enable = false;
     public bool readyCheck_ShowToastNotification = true;
@@ -114,6 +115,7 @@ internal class Configuration : IEzConfig
     public List<HttpRequestElement> readyCheck_HttpRequests = [];
     public SoundSettings readyCheck_SoundSettings = new();
     public bool readyCheck_AlwaysExecute = false;
+    public bool readyCheck_TataruPraise = true;
 
     public bool partyCutscene_Enable = false;
     public bool partyCutscene_ShowToastNotification = true;
@@ -125,6 +127,7 @@ internal class Configuration : IEzConfig
     public List<HttpRequestElement> partyCutscene_HttpRequests = [];
     public SoundSettings partyCutscene_SoundSettings = new();
     public bool partyCutscene_AlwaysExecute = true;
+    public bool partyCutscene_TataruPraise = true;
 
     public bool countdown_Enable = false;
     public bool countdown_ShowToastNotification = true;

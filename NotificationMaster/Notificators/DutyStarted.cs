@@ -34,6 +34,11 @@ internal class DutyStarted : IDisposable
     {
         PluginLog.Debug($"Duty {(recommenced ? "recommenced" : "started")}, territory={territory}");
         if(p.PauseUntil > Environment.TickCount64) return;
+        // 🔴 刻意放在「遊戲是否在前景」的判斷之前：語音提醒是給正在玩的人聽的，
+        // 跟著「只在背景時通知」的規則走的話，開著遊戲反而永遠不出聲，看起來像壞掉。
+        // 其他通知動作的觸發條件完全沒有被動到。
+        // 團滅後重開（recommenced）算同一場任務，不重複念。
+        if(!recommenced && p.cfg.dutyStart_TataruPraise) TataruPraiseBridge.Praise(TataruPraiseBridge.CategoryDutyStart);
         if(!Utils.IsApplicationActivated || p.cfg.dutyStart_AlwaysExecute)
         {
             DoNotify(GetDutyName(territory), recommenced);

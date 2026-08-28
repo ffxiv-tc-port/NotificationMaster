@@ -25,6 +25,8 @@ internal class ReadyCheck : IDisposable
         if(p.PauseUntil > Environment.TickCount64) return;
         // the same addon may be closed and reopened within one ready check; do not notify twice
         if(!EzThrottler.Throttle("NotificationMaster.ReadyCheck", 10000)) return;
+        // 見 TataruPraiseBridge：語音提醒不跟「只在背景時通知」的規則走。
+        if(p.cfg.readyCheck_TataruPraise) TataruPraiseBridge.Praise(TataruPraiseBridge.CategoryReadyCheck);
         if(!Utils.IsApplicationActivated || p.cfg.readyCheck_AlwaysExecute)
         {
             DoNotify();
