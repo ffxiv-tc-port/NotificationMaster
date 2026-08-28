@@ -31,6 +31,10 @@ internal class CfPop : IDisposable
             return;
         }
         if(p.PauseUntil > Environment.TickCount64) return;
+        // 見 TataruPraiseBridge：語音提醒不跟「只在背景時通知」的規則走。
+        // 🔴 刻意放在 Pop() 而不是 DoNotify()：DoNotify 會被 30 秒後的「還剩 15 秒」重複提醒
+        // 再叫一次，只有這裡是「真的排到」那一次。
+        if(p.cfg.cfPop_TataruPraise) TataruPraiseBridge.Praise(TataruPraiseBridge.CategoryCfPop);
         if((!Utils.IsApplicationActivated || p.cfg.cfPop_AlwaysExecute) && !(p.cfg.cfPop_NotifyOnlyIn30 && p.cfg.cfPop_NotifyIn30))
         {
             DoNotify(e.Name.ToString());

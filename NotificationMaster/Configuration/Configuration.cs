@@ -41,6 +41,7 @@ internal class Configuration : IEzConfig
     public List<HttpRequestElement> chatMessage_HttpRequests = [];
     public SoundSettings chatMessage_SoundSettings = new();
     public bool chatMessage_AlwaysExecute = false;
+    public bool chatMessage_TataruPraise = true;
 
     public bool cfPop_Enable = false;
     public bool cfPop_ShowToastNotification = true;
@@ -52,6 +53,7 @@ internal class Configuration : IEzConfig
     public List<HttpRequestElement> cfPop_HttpRequests = [];
     public SoundSettings cfPop_SoundSettings = new();
     public bool cfPop_AlwaysExecute = false;
+    public bool cfPop_TataruPraise = true;
 
     public bool loginError_Enable = false;
     public bool loginError_AlwaysExecute = true;
@@ -73,6 +75,7 @@ internal class Configuration : IEzConfig
     public List<HttpRequestElement> mapFlag_HttpRequests = [];
     public SoundSettings mapFlag_SoundSettings = new();
     public bool mapFlag_AlwaysExecute = false;
+    public bool mapFlag_TataruPraise = true;
 
     public bool mobPulled_Enable = false;
     public bool mobPulled_FlashTrayIcon = true;

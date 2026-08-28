@@ -35,6 +35,15 @@ internal static class TataruPraiseBridge
     /// <summary>隊友看完過場動畫。</summary>
     internal const string CategoryCutsceneEnded = "過場結束";
 
+    /// <summary>排到副本（Duty Finder 跳出邀請）。</summary>
+    internal const string CategoryCfPop = "副本排到";
+
+    /// <summary>走到地圖旗標附近。</summary>
+    internal const string CategoryMapFlag = "到旗標";
+
+    /// <summary>命中聊天規則（關鍵字／私訊）。</summary>
+    internal const string CategoryChatMessage = "私訊";
+
     /// <summary>
     /// 請塔塔露念一句指定情境的話。對方沒安裝／沒開啟／池是空的都只是靜靜地什麼都不做。
     /// </summary>

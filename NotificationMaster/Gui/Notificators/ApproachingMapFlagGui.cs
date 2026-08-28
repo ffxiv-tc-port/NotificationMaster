@@ -47,6 +47,8 @@ internal unsafe partial class ConfigGui
             ImGui.Checkbox("Flash taskbar icon".Loc(), ref p.cfg.mapFlag_FlashTrayIcon);
             ImGui.Checkbox("Bring FFXIV to foreground".Loc(), ref p.cfg.mapFlag_AutoActivateWindow);
             ImGui.Checkbox("Execute actions even if game is active".Loc(), ref p.cfg.mapFlag_AlwaysExecute);
+            ImGui.Checkbox("Ask Tataru to remind you when this triggers (requires TataruPraise)".Loc(), ref p.cfg.mapFlag_TataruPraise);
+            if(ImGui.IsItemHovered()) ImGui.SetTooltip("Plays a TataruPraise voice line through IPC, under the same conditions as the actions above. Silently skipped if TataruPraise is not installed or is turned off.".Loc());
             ForegroundWarning(p.cfg.mapFlag_AutoActivateWindow);
             ImGui.SetNextItemWidth(100f);
             ImGui.DragInt("Distance to marker".Loc(), ref p.cfg.mapFlag_TriggerDistance);
