@@ -1,5 +1,4 @@
 using Dalamud.Plugin.Ipc;
-using ECommons.Throttlers;
 
 namespace NotificationMaster.Hub;
 
@@ -48,6 +47,25 @@ internal sealed class NotificationHub : IDisposable
     /// 而使用者在 UI 上連「有這個東西」都看不到。
     /// </remarks>
     private static readonly SortedSet<string> seenCategories = new(StringComparer.Ordinal);
+
+    /// <summary>（外掛, 分類）→ 這個時間點（<c>Environment.TickCount64</c>）之前不再通知。</summary>
+    /// <remarks>
+    /// 🔴 <b>刻意不用 ECommons 的 <c>EzThrottler</c>。</b> 它背後是一個<b>沒有上鎖</b>的
+    /// <c>Dictionary&lt;string, long&gt;</c>，而且是整個外掛<b>共用</b>的靜態實例——
+    /// NotificationMaster 自己那些 notificator 都在 framework 執行緒上用它。
+    /// 樞紐是<b>公開的 IPC 端點</b>，會被呼叫端從它自己的背景執行緒叫進來；
+    /// 兩邊同時對同一個字典做插入的失敗形式不是「拿到舊值」，而是<b>字典本身壞掉</b>
+    /// （擴容期間的競態可以讓後續查詢無限迴圈）。
+    /// <para>
+    /// 📌 順帶一提，<c>EzThrottler</c> 的 key 是<b>全域且永久</b>的：
+    /// 用它的話這裡的 key 還會一直留在那個共用字典裡。
+    /// </para>
+    /// <para>
+    /// 📌 key 用 ValueTuple 而不是把兩個字串接起來：接字串就要選一個分隔字元，
+    /// 而任何分隔字元都可能出現在外掛名或分類名裡（撞到就是兩個不同事件共用一個節流）。
+    /// </para>
+    /// </remarks>
+    private static readonly Dictionary<(string Caller, string Category), long> throttleUntil = [];
 
     internal NotificationHub()
     {
@@ -157,9 +175,9 @@ internal sealed class NotificationHub : IDisposable
 
         // 🔴 節流是<b>地板</b>不是策略：真正「同一件事只叫一次」要由呼叫端在狀態邊緣上做。
         //    這裡只保證呼叫端寫錯（放進輪詢迴圈）時不會把系統匣氣球洗爆。
-        //    ⚠️ EzThrottler 的 key 是全域持久的，而且<b>第一次一定放行</b>——正是我們要的。
+        //    📌 第一次一定放行，見 PassesThrottle。
         var throttle = P.cfg.hub_ThrottleMs;
-        if(throttle > 0 && !EzThrottler.Throttle($"NMHub.{caller}.{category}", throttle))
+        if(throttle > 0 && !PassesThrottle(caller, category, throttle))
         {
             PluginLog.Debug($"[通知樞紐] {caller} 的「{category}」在 {throttle}ms 節流內，略過。");
             return false;
@@ -235,6 +253,19 @@ internal sealed class NotificationHub : IDisposable
                 ["<title>", title],
                 ["<body>", body],
             ]));
+        }
+    }
+
+    /// <summary>這個「外掛＋分類」現在放不放行；放行的話同時把下次可通知的時間往後推。</summary>
+    private static bool PassesThrottle(string caller, string category, int throttleMs)
+    {
+        var now = Environment.TickCount64;
+        lock(Gate)
+        {
+            // 📌 第一次一定放行（字典裡還沒有這個鍵）——通知要的正是這個行為。
+            if(throttleUntil.TryGetValue((caller, category), out var until) && now < until) return false;
+            throttleUntil[(caller, category)] = now + throttleMs;
+            return true;
         }
     }
 
