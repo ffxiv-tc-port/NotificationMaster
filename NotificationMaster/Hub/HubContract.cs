@@ -32,6 +32,16 @@ internal static class HubContract
     /// <para>
     /// 🔴 回傳值<b>不可以</b>被呼叫端拿來決定要不要重試。它是給記錄檔用的。
     /// </para>
+    /// <para>
+    /// 🔴🔴 <b>接這個端點之前先確認自己沒有另一條 TataruPraise 的路。</b>
+    /// 「語音」是路由表上的一個管道，而且預設是<b>開</b>的。
+    /// 呼叫端如果已經有自己的 <c>TataruPraise.Praise</c> wrapper 在同一個事件上叫，
+    /// 接上樞紐之後同一件事會<b>念兩次</b>——而且兩邊的開關長在不同的外掛裡，
+    /// 使用者很難自己推出來是怎麼回事。
+    /// 二選一：①把自己那條語音路拆掉、改由樞紐統一發
+    /// ②不要用樞紐，只用 <c>NotificationMasterAPI</c> 碰系統匣與工作列
+    /// （AutoRetainer 的僱員通知選的是②，理由寫在它的 <c>Modules/RetainerTrayNotify.cs</c>）。
+    /// </para>
     /// </remarks>
     internal const string Notify = "NotificationMaster.Notify";
 
