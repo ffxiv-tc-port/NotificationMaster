@@ -20,6 +20,16 @@ namespace NotificationMaster.Hub;
 /// <para>
 /// ⚠️ 順序即設定矩陣上的顯示順序（與 TataruPraise 的 <c>PraiseCategory.All</c> 一致）。
 /// </para>
+/// <para>
+/// 🔴 <b>驗這份清單有沒有跟權威分岔，用現成的稽核工具，不要用眼睛看</b>
+/// （打錯字的失敗形式是「語音那條管道靜默不出聲」，跟「使用者把這個情境關掉了」分不出來）：
+/// <code>
+/// python C:/Users/lother/.claude/tools/fleet/tataru_category_audit.py \
+///     --extra D:/ffxiv-tc-port/NotificationMaster/NotificationMaster/Hub/HubCategories.cs
+/// </code>
+/// ⚠️ <b><c>--extra</c> 不能省。</b> 那支工具找消費端的方式是「檔名含 tatarupraise 的 .cs」，
+/// 而這個檔名不含——不加 <c>--extra</c> 的話它會<b>完全不看這個檔而且回報一切正常</b>。
+/// </para>
 /// </remarks>
 internal static class HubCategories
 {
