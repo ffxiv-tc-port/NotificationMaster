@@ -29,7 +29,7 @@ namespace NotificationMaster.Hub;
 /// 📌 <b>2026-09-04 起 <c>--extra</c> 不必再給。</b> 那支工具原本只用「檔名含 tatarupraise」找消費端，
 /// 而這個檔名不含 —— 於是它<b>完全不看這個檔，還回報一切正常</b>（假陰性）。現在改成三條軸取聯集：
 /// 檔名、剝註解後含頻道字面前綴、以及<b>宣告的 <c>const string</c> 值命中權威情境 ≥3 個</b>。
-/// 本檔是靠第三條被找到的（它宣告的 27 個值全是權威情境）。
+/// 本檔是靠第三條被找到的（它宣告的 33 個值全是權威情境）。
 /// 🔑 門檻用「≥3 個命中」而不是「全部命中」是刻意的：若本檔有 26 個正確 ＋ 1 個錯字，
 /// 「≥3」照樣把它納入、那個錯字才會被報成 UNKNOWN；改成全等比對<b>正好會把要抓的東西濾掉</b>。
 /// </para>
@@ -63,6 +63,12 @@ internal static class HubCategories
     internal const string TellReceived = "被密語";
     internal const string PartyInvite = "組隊邀請";
     internal const string TradeRequest = "交易請求";
+    internal const string DutyRunStopped = "跑本停止";
+    internal const string GatherStopped = "採集停止";
+    internal const string RareFish = "稀有魚";
+    internal const string HuntFound = "發現魔物";
+    internal const string BagAlmostFull = "背包快滿";
+    internal const string DailyReset = "每日重置";
 
     /// <summary>已知分類，順序即矩陣上的顯示順序。</summary>
     internal static readonly string[] All =
@@ -94,5 +100,11 @@ internal static class HubCategories
         TellReceived,
         PartyInvite,
         TradeRequest,
+        DutyRunStopped,
+        GatherStopped,
+        RareFish,
+        HuntFound,
+        BagAlmostFull,
+        DailyReset,
     ];
 }

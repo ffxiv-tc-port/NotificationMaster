@@ -76,7 +76,7 @@ internal partial class ConfigGui
         if(ImGui.Button("全部恢復預設"))
         {
             // 🔴 清空字典＝回到「缺鍵＝預設路由」。刻意不是「把每一列寫成預設值」——
-            //    那樣會把 27 列全部釘進使用者的設定檔，之後我們再也改不動預設值。
+            //    那樣會把 33 列全部釘進使用者的設定檔，之後我們再也改不動預設值。
             lock(NotificationHub.Gate) p.cfg.hub_Routes.Clear();
             p.cfg.Save();
         }
@@ -157,7 +157,7 @@ internal partial class ConfigGui
         {
             ImGui.TableSetColumnIndex(i + 1);
             var value = HubColumns[i].Get(shown);
-            // id 要帶分類名，否則同一欄的 27 個核取方塊會共用 id 而互相干擾。
+            // id 要帶分類名，否則同一欄的 33 個核取方塊會共用 id 而互相干擾。
             if(ImGui.Checkbox($"##{category}-{i}", ref value))
             {
                 HubColumns[i].Set(shown, value);
