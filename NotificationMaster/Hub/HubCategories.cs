@@ -24,11 +24,14 @@ namespace NotificationMaster.Hub;
 /// 🔴 <b>驗這份清單有沒有跟權威分岔，用現成的稽核工具，不要用眼睛看</b>
 /// （打錯字的失敗形式是「語音那條管道靜默不出聲」，跟「使用者把這個情境關掉了」分不出來）：
 /// <code>
-/// python C:/Users/lother/.claude/tools/fleet/tataru_category_audit.py \
-///     --extra D:/ffxiv-tc-port/NotificationMaster/NotificationMaster/Hub/HubCategories.cs
+/// python C:/Users/lother/.claude/tools/fleet/tataru_category_audit.py
 /// </code>
-/// ⚠️ <b><c>--extra</c> 不能省。</b> 那支工具找消費端的方式是「檔名含 tatarupraise 的 .cs」，
-/// 而這個檔名不含——不加 <c>--extra</c> 的話它會<b>完全不看這個檔而且回報一切正常</b>。
+/// 📌 <b>2026-09-04 起 <c>--extra</c> 不必再給。</b> 那支工具原本只用「檔名含 tatarupraise」找消費端，
+/// 而這個檔名不含 —— 於是它<b>完全不看這個檔，還回報一切正常</b>（假陰性）。現在改成三條軸取聯集：
+/// 檔名、剝註解後含頻道字面前綴、以及<b>宣告的 <c>const string</c> 值命中權威情境 ≥3 個</b>。
+/// 本檔是靠第三條被找到的（它宣告的 27 個值全是權威情境）。
+/// 🔑 門檻用「≥3 個命中」而不是「全部命中」是刻意的：若本檔有 26 個正確 ＋ 1 個錯字，
+/// 「≥3」照樣把它納入、那個錯字才會被報成 UNKNOWN；改成全等比對<b>正好會把要抓的東西濾掉</b>。
 /// </para>
 /// </remarks>
 internal static class HubCategories
