@@ -1,5 +1,47 @@
 # NotificationMaster
-Notifies you about various events while your game is minimized.
 
-## Install
-Enable plugin testing in `/xlsettings` - experimental, then install plugin from the plugin list.
+[NotificationMaster](https://github.com/NightmareXIV/NotificationMaster) 的台服移植版。在遊戲視窗最小化或沒在看畫面時，用氣球通知、工作列閃爍、音效、聊天列印、語音等方式提醒你各種事件。
+
+## 內建通知事件
+
+- GP 恢復
+- 過場動畫結束 / 小隊過場動畫結束
+- 收到聊天訊息
+- 副本已配對成功（Duty pop）
+- 連線錯誤
+- 接近設定的地圖旗標、抵達目的地（搭配 vnavmesh）
+- 監控名單中的怪物進入戰鬥（例如世界地圖上的稀有怪）
+- 使用招募功能時，隊伍成員異動（加入／離開／解散）
+- 釣魚上鉤提示
+- 副本開始
+- 準備確認發起（提示框一跳出就通知，同一次只通知一次）
+- 戰鬥倒數開始
+
+每個事件可各自開關、設定觸發條件與通知管道。
+
+## 通知樞紐（Hub）
+
+提供 IPC 讓其他插件送入「分類＋標題＋內容」，由使用者在此設定的路由表決定要不要通知、透過哪些管道扇出：系統匣氣球、工作列閃爍、音效、聊天視窗列印、HTTP webhook、語音（見下）、或把遊戲視窗帶到前景。純被動通知，不會觸發任何遊戲內操作。
+
+## 其他整合
+
+- **TataruPraise 語音**：通知事件發生時可請 TataruPraise（塔塔露誇獎）念一句對應台詞。
+- **HTTP Webhook**：可將通知轉送到外部服務。
+
+## 指令
+
+- `/pnotify`：開關設定視窗
+- `/pnotify shutup [分鐘]`（簡寫 `s`）：暫停通知指定分鐘數，不給分鐘數則暫停到重新啟動為止
+- `/pnotify resume`（簡寫 `r`）：恢復通知
+- `/gp [數值]`：開啟設定視窗，或直接設定 GP 恢復通知的觸發值（GP 恢復通知開啟時才有）
+
+## 台服版的修改
+
+- 介面繁體中文化。
+- 新增通知樞紐（Hub）：別的插件送事件進來，由路由表決定通知管道。
+- 新增「抵達（vnavmesh）」通知。
+- 副本排到、到旗標、抵達、私訊、副本開始、準備確認、小隊過場動畫結束等通知可請塔塔露誇獎念一句。
+- 「準備確認」通知改在提示框跳出時就發。
+- 修正接近地圖旗標的「即使遊戲在前景也執行」開關反了的問題。
+
+原作者：[NightmareXIV](https://github.com/NightmareXIV/NotificationMaster)

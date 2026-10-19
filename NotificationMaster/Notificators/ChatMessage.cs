@@ -1,5 +1,4 @@
-﻿using Dalamud.Game.Chat;
-using Dalamud.Game.Text;
+﻿using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using System.Text.RegularExpressions;
 
@@ -22,11 +21,8 @@ internal class ChatMessage : IDisposable
         Svc.Chat.ChatMessage += Chat_ChatMessage;
     }
 
-    private void Chat_ChatMessage(IHandleableChatMessage cm)
+    private void Chat_ChatMessage(XivChatType type, int timestamp, ref SeString sender, ref SeString message, ref bool isHandled)
     {
-        var type = cm.LogKind;
-        var sender = cm.Sender;
-        var message = cm.Message;
         if(p.configGui.open)
         {
             if(!pause) ChatLog.AddShifting(((ushort)type, sender.ToString(), message.ToString()));
@@ -38,6 +34,8 @@ internal class ChatMessage : IDisposable
             {
                 var senderFullStr = sender.ToString();
                 var messageFullStr = message.ToString();
+                // 一則訊息可能同時命中多條規則，但只念一次。
+                var praised = false;
                 foreach(var e in p.cfg.chatMessage_Elements)
                 {
                     if(
@@ -56,6 +54,14 @@ internal class ChatMessage : IDisposable
                         )
                     )
                     {
+                        // 沿用這條規則既有的比對條件（頻道／寄件者／訊息內容）才會走到這裡。
+                        // ⚠️ 與其他模組不同，整個比對迴圈本來就包在「遊戲不在前景」的閘門裡，
+                        // 所以語音同樣跟著那個閘門走。
+                        if(p.cfg.chatMessage_TataruPraise && !praised)
+                        {
+                            praised = true;
+                            TataruPraiseBridge.Praise(TataruPraiseBridge.CategoryChatMessage);
+                        }
                         if(p.cfg.chatMessage_FlashTrayIcon && !e.NoFlash)
                         {
                             Native.Impl.FlashWindow();
@@ -63,7 +69,7 @@ internal class ChatMessage : IDisposable
                         if(p.cfg.chatMessage_AutoActivateWindow && !e.NoForeground) Native.Impl.Activate();
                         if(p.cfg.chatMessage_ShowToastNotification && !e.NoToast)
                         {
-                            TrayIconManager.ShowToast(messageFullStr, "Message" + (senderFullStr == "" ? "" : $" from {senderFullStr}"));
+                            TrayIconManager.ShowToast(messageFullStr, senderFullStr == "" ? "Message".Loc() : "Message from ??".Loc(senderFullStr));
                         }
                         if(p.cfg.chatMessage_HttpRequestsEnable && !e.NoHTTP)
                         {

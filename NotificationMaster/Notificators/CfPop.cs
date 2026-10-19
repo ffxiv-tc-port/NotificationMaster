@@ -30,7 +30,16 @@ internal class CfPop : IDisposable
             PluginLog.Debug($"Notification is being suppressed");
             return;
         }
+        if(p.HoardFarmRunning())
+        {
+            PluginLog.Information("[NotificationMaster] HoardFarm 正在自動刷寶，不通知副本排到");
+            return;
+        }
         if(p.PauseUntil > Environment.TickCount64) return;
+        // 見 TataruPraiseBridge：語音提醒不跟「只在背景時通知」的規則走。
+        // 🔴 刻意放在 Pop() 而不是 DoNotify()：DoNotify 會被 30 秒後的「還剩 15 秒」重複提醒
+        // 再叫一次，只有這裡是「真的排到」那一次。
+        if(p.cfg.cfPop_TataruPraise) TataruPraiseBridge.Praise(TataruPraiseBridge.CategoryCfPop);
         if((!Utils.IsApplicationActivated || p.cfg.cfPop_AlwaysExecute) && !(p.cfg.cfPop_NotifyOnlyIn30 && p.cfg.cfPop_NotifyIn30))
         {
             DoNotify(e.Name.ToString());
@@ -54,7 +63,7 @@ internal class CfPop : IDisposable
 
     private void DoNotify(string str, bool soonEnd = false)
     {
-        if(str == "") str = "Duty roulette";
+        if(str == "") str = "Duty roulette".Loc();
         if(p.cfg.cfPop_FlashTrayIcon)
         {
             Native.Impl.FlashWindow();
@@ -62,7 +71,7 @@ internal class CfPop : IDisposable
         if(p.cfg.cfPop_AutoActivateWindow) Native.Impl.Activate();
         if(p.cfg.cfPop_ShowToastNotification)
         {
-            TrayIconManager.ShowToast(str, soonEnd ? "Duty invitation expires in 15 seconds!" : "Duty pop");
+            TrayIconManager.ShowToast(str, soonEnd ? "Duty invitation expires in 15 seconds!".Loc() : "Duty pop".Loc());
         }
         if(p.cfg.cfPop_HttpRequestsEnable)
         {

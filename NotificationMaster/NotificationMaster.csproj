@@ -2,12 +2,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<Authors>NightmareXIV</Authors>
-		<Version>2.1.1.17</Version>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<TargetFramework>net10.0-windows7.0</TargetFramework>
+		<BuildNumberFile>$(MSBuildProjectDirectory)\BuildNumber.txt</BuildNumberFile>
+		<_PreviousBuildNumber Condition="Exists('$(BuildNumberFile)')">$([System.IO.File]::ReadAllText('$(BuildNumberFile)').Trim())</_PreviousBuildNumber>
+		<_PreviousBuildNumber Condition="'$(_PreviousBuildNumber)' == ''">0</_PreviousBuildNumber>
+		<BuildNumber>$([MSBuild]::Add($(_PreviousBuildNumber), 1))</BuildNumber>
+		<VersionPrefix>7.15.0</VersionPrefix>
+		<Version>$(VersionPrefix).$(BuildNumber)</Version>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<FileVersion>$(Version)</FileVersion>
+	</PropertyGroup>
+	<Target Name="PersistBuildNumber" AfterTargets="Build">
+		<WriteLinesToFile File="$(BuildNumberFile)" Lines="$(BuildNumber)" Overwrite="true" />
+	</Target>
+
+	<PropertyGroup>
+		<TargetFramework>net9.0-windows7.0</TargetFramework>
 		<Platforms>x64</Platforms>
+		<AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
 		<LangVersion>latest</LangVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
@@ -21,6 +35,8 @@
 	<PropertyGroup Label="Documentation">
 		<DocumentationFile></DocumentationFile>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<!-- 文件註解照常由編譯器產生（留在 obj，文件註解語法檢查照舊），只是不複製進輸出目錄：執行期用不到，出貨包也就不帶它。 -->
+		<CopyDocumentationFileToOutputDirectory>false</CopyDocumentationFileToOutputDirectory>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -63,7 +79,15 @@
 
 	<ItemGroup>
 		<PackageReference Include="DalamudPackager" Version="15.0.0" />
-		<PackageReference Include="ECommons" Version="3.2.0.18" />
+		<!-- ECommons 走本 org 的 fork 子模組(BaseVersion 是 3.0.1.15,只換來源不換版本號)。
+		     公開 NuGet 的 ECommons 沒有我們補的判空/加固,其中 AddonMaster / ClickHelper 對
+		     AtkComponentBase.OwnerNode 零判空是 AVE 入口 —— AVE 在 .NET Core 是 corrupted-state
+		     exception,try/catch 與 HookSafety.ExecuteSafe 都攔不到,所以來源必須是 fork。
+		     🔴 版本號分不出來源:公開 NuGet 也有 3.0.1.15,判定只能看內容(加固版才有的
+		     GenericHelpers.IsComponentEnabled 等成員,公開那顆是 0)。
+		     驗法 tools/fleet/ecommons_hardening_check.py —— 兩軸:obj/project.assets.json 的
+		     ECommons 條目是 type=project ＋ 出貨目錄那顆 ECommons.dll 的標記位元組。 -->
+		<ProjectReference Include="..\ECommons\ECommons\ECommons.csproj" />
 		<ProjectReference Include="..\NotificationMasterAPI\NotificationMasterAPI\NotificationMasterAPI.csproj" />
 		<Reference Include="Newtonsoft.Json">
 			<HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
@@ -114,8 +138,30 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="LanguageChineseTraditional.ini">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <EmbeddedResource Include="Sounds\Info.wav" />
 	  <EmbeddedResource Include="Sounds\Alert.wav" />
 	  <EmbeddedResource Include="Sounds\Alarm.wav" />
 	</ItemGroup>
+
+	<!-- ECommons 的文件註解檔 ECommons.xml 執行期用不到：不複製進輸出目錄，出貨包也就不帶它（ECommons.pdb 照留，崩潰堆疊行號要用）。 -->
+	<Target Name="ExcludeECommonsXmlDoc" AfterTargets="ResolveAssemblyReferences">
+		<ItemGroup>
+			<_ECommonsXmlDoc Include="@(ReferenceCopyLocalPaths)" Condition="'%(Filename)%(Extension)' == 'ECommons.xml'" />
+			<ReferenceCopyLocalPaths Remove="@(_ECommonsXmlDoc)" />
+		</ItemGroup>
+	</Target>
+
+	<!-- NotificationMasterAPI 的文件註解檔 NotificationMasterAPI.xml 執行期用不到：不複製進輸出目錄，出貨包也就不帶它（NotificationMasterAPI.pdb 照留，崩潰堆疊行號要用）。 -->
+	<Target Name="ExcludeNotificationMasterAPIXmlDoc" AfterTargets="ResolveAssemblyReferences">
+		<ItemGroup>
+			<_NotificationMasterAPIXmlDoc Include="@(ReferenceCopyLocalPaths)" Condition="'%(Filename)%(Extension)' == 'NotificationMasterAPI.xml'" />
+			<ReferenceCopyLocalPaths Remove="@(_NotificationMasterAPIXmlDoc)" />
+		</ItemGroup>
+	</Target>
 </Project>
