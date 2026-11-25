@@ -44,4 +44,10 @@
 - 「準備確認」通知改在提示框跳出時就發。
 - 修正接近地圖旗標的「即使遊戲在前景也執行」開關反了的問題。
 
+## 安裝
+
+`/xlsettings` 開「Dalamud 設定」→「試驗性功能」→「第三方插件倉庫」，加入 `https://raw.githubusercontent.com/ffxiv-tc-port/DalamudPluginsTC/main/repo.json` 並啟用、儲存，再到「插件管理員」（`/xlplugins`）安裝；同一個插件只裝這裡的版本，不要同時裝上游版。
+
 原作者：[NightmareXIV](https://github.com/NightmareXIV/NotificationMaster)
+
+授權：AGPL-3.0（見 LICENSE）
