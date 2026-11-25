@@ -36,10 +36,14 @@ internal class ChatMessage : IDisposable
                 var messageFullStr = message.ToString();
                 // 一則訊息可能同時命中多條規則，但只念一次。
                 var praised = false;
+                // 遊戲把發話者／對象旗標打包在低 7 位元之上；規則從列舉挑的是低位值，
+                // 原值或遮罩後任一相符就算（從聊天紀錄建的原值規則照舊命中）。
+                var rawType = (ushort)type;
+                var kindType = (ushort)(rawType & 0x7F);
                 foreach(var e in p.cfg.chatMessage_Elements)
                 {
                     if(
-                        (e.ChatTypes.Count == 0 || e.ChatTypes.Contains((ushort)type))
+                        (e.ChatTypes.Count == 0 || e.ChatTypes.Contains(rawType) || e.ChatTypes.Contains(kindType))
                         && (e.MessageStr == ""
                             //|| (e.MessageStr == "" && messageFullStr == "")
                             || (e.CompareType == 0 && messageFullStr.Contains(e.MessageStr, StringComparison.Ordinal))
